@@ -11,7 +11,10 @@ window.CONFIG = {
     sceneEclipse: 'assets/illustrations/scene-eclipse.png',
     shopBanner: 'assets/illustrations/premium-shop-banner.png',
     starlightEvent: 'assets/illustrations/starlight-event.png',
-    achievementConstellation: 'assets/illustrations/achievement-constellation.png'
+    achievementConstellation: 'assets/illustrations/achievement-constellation.png',
+    galleryBanner: 'assets/illustrations/gallery-banner.png',
+    galleryCharacters: 'assets/illustrations/gallery-characters.png',
+    galleryScenes: 'assets/illustrations/gallery-scenes.png'
   },
 
   // Cumulative TOTAL EARNED points needed to reach each level (index 0 = level 1).
@@ -24,7 +27,7 @@ window.CONFIG = {
   },
 
   // Level at which each model unlocks. The first six values are save-compatible legacy unlocks.
-  MODEL_UNLOCKS: [1, 3, 5, 8, 11, 15, 8, 9, 10, 12, 14, 15],
+  MODEL_UNLOCKS: [1, 3, 5, 8, 11, 15, 8, 9, 10, 12, 14, 15, 6, 7, 9, 11, 13, 15],
   MODELS: [
     'assets/models/girl1.png',
     'assets/models/girl2.png',
@@ -37,7 +40,13 @@ window.CONFIG = {
     'assets/models/premium-marina.png',
     'assets/models/premium-jade.png',
     'assets/models/premium-vesper.png',
-    'assets/models/premium-nocturne.png'
+    'assets/models/premium-nocturne.png',
+    'assets/models/premium-lyra.png',
+    'assets/models/premium-sable.png',
+    'assets/models/premium-coral.png',
+    'assets/models/premium-iris.png',
+    'assets/models/premium-onyx.png',
+    'assets/models/premium-celeste.png'
   ],
   SHOP_ITEMS: [
     {
@@ -95,8 +104,13 @@ window.CONFIG = {
   },
 
   MODEL_NAMES: {
-    en: ['Petal', 'Sunbeam', 'Tide', 'Verdant', 'Prism', 'Starlight', 'Velvet', 'Aurelia', 'Marina', 'Jade', 'Vesper', 'Nocturne'],
-    ru: ['Лепесток', 'Солнышко', 'Прилив', 'Вердант', 'Призма', 'Звезда', 'Вельвет', 'Аурелия', 'Марина', 'Джейд', 'Веспер', 'Ноктюрн']
+    en: ['Petal', 'Sunbeam', 'Tide', 'Verdant', 'Prism', 'Starlight', 'Velvet', 'Aurelia', 'Marina', 'Jade', 'Vesper', 'Nocturne', 'Lyra', 'Sable', 'Coral', 'Iris', 'Onyx', 'Celeste'],
+    ru: ['Лепесток', 'Солнышко', 'Прилив', 'Вердант', 'Призма', 'Звезда', 'Вельвет', 'Аурелия', 'Марина', 'Джейд', 'Веспер', 'Ноктюрн', 'Лира', 'Сейбл', 'Корал', 'Ирис', 'Оникс', 'Селеста']
+  },
+
+  SCENE_NAMES: {
+    en: ['Pink dawn', 'Peach orbit', 'Sunset relay', 'Sky harbor', 'Tideglass', 'Meadow signal', 'Verdant drift', 'Lavender gate', 'Violet passage', 'Rose night', 'Blue convergence', 'Dusk archive', 'Aurora observatory', 'Nebula terrace', 'Eclipse horizon'],
+    ru: ['Розовый рассвет', 'Персиковая орбита', 'Закатный маяк', 'Небесная гавань', 'Приливное стекло', 'Сигнал луга', 'Зелёный дрейф', 'Лавандовые врата', 'Фиолетовый проход', 'Розовая ночь', 'Синее схождение', 'Сумеречный архив', 'Обсерватория сияния', 'Терраса туманности', 'Горизонт затмения']
   },
 
   // One scene per level, auto-applied on level-up; players can cycle unlocked ones.
@@ -150,6 +164,7 @@ window.CONFIG = {
       saved: 'Progress saved',
       offline: 'Playing offline',
       language: 'RU',
+      switchLanguage: 'Switch language',
       previous: 'Previous',
       next: 'Next',
       clickHint: 'TAP TO COLLECT',
@@ -159,6 +174,17 @@ window.CONFIG = {
       shopTitle: 'Starlight Shop',
       shopArtAlt: 'Premium cosmic fashion collection',
       achievementsArtAlt: 'Constellation of unlocked achievements',
+      gallery: 'COLLECTION',
+      galleryTitle: 'Cosmic archive',
+      gallerySummary: '{a} / {b} models · {c} / {d} scenes unlocked',
+      galleryModels: 'CHARACTER ARCHIVE',
+      galleryScenes: 'SCENERY ARCHIVE',
+      galleryBannerAlt: 'Celestial archive gallery',
+      galleryCharactersAlt: 'Orbiting character wardrobe',
+      galleryScenesAlt: 'Cosmic scenery index',
+      galleryLocked: 'Unlocks at level {a}',
+      galleryCurrent: 'CURRENT',
+      galleryAvailable: 'SELECT',
       shopSummary: '{a} / {b} achievements unlocked',
       close: 'Close',
       shopLocked: 'Unlocks at level {a}',
@@ -242,6 +268,7 @@ window.CONFIG = {
       saved: 'Прогресс сохранён',
       offline: 'Играем офлайн',
       language: 'EN',
+      switchLanguage: 'Переключить язык',
       previous: 'Назад',
       next: 'Вперёд',
       clickHint: 'НАЖМИ, ЧТОБЫ СОБРАТЬ',
@@ -251,6 +278,17 @@ window.CONFIG = {
       shopTitle: 'Магазин звёздного света',
       shopArtAlt: 'Премиальная космическая коллекция образов',
       achievementsArtAlt: 'Созвездие открытых достижений',
+      gallery: 'ГАЛЕРЕЯ',
+      galleryTitle: 'Космический архив',
+      gallerySummary: '{a} / {b} персонажей · {c} / {d} сцен открыто',
+      galleryModels: 'АРХИВ ПЕРСОНАЖЕЙ',
+      galleryScenes: 'АРХИВ СЦЕН',
+      galleryBannerAlt: 'Галерея небесного архива',
+      galleryCharactersAlt: 'Орбитальный гардероб персонажей',
+      galleryScenesAlt: 'Индекс космических сцен',
+      galleryLocked: 'Откроется на уровне {a}',
+      galleryCurrent: 'ТЕКУЩЕЕ',
+      galleryAvailable: 'ВЫБРАТЬ',
       shopSummary: '{a} / {b} достижений открыто',
       close: 'Закрыть',
       shopLocked: 'Откроется на уровне {a}',

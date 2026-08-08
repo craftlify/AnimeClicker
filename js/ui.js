@@ -11,6 +11,7 @@
     let toastTimer = 0;
     let shopBuilt = false;
     let shopReturnFocus = null;
+    let galleryReturnFocus = null;
 
     function cache() {
       const ids = [
@@ -25,6 +26,9 @@
         'model-prev', 'model-next', 'save-status', 'shop-button', 'shop-sheet', 'shop-backdrop',
         'shop-close', 'shop-list', 'shop-title', 'shop-summary', 'shop-art', 'achievements-title',
         'achievement-count', 'achievement-list', 'achievement-art', 'event-star',
+        'gallery-button', 'gallery-sheet', 'gallery-backdrop', 'gallery-close', 'gallery-title',
+        'gallery-summary', 'gallery-banner', 'gallery-models-title', 'gallery-characters-art',
+        'gallery-model-list', 'gallery-scenes-title', 'gallery-scenes-art', 'gallery-scene-list',
         'leaderboard-button', 'leaderboard-sheet', 'leaderboard-backdrop', 'leaderboard-close',
         'leaderboard-title', 'leaderboard-summary', 'leaderboard-list', 'leaderboard-status'
       ];
@@ -37,6 +41,18 @@
 
     function formatNumber(value) {
       return new Intl.NumberFormat(language === 'ru' ? 'ru-RU' : 'en-US').format(Math.max(0, Math.floor(value || 0)));
+    }
+
+    function focusWithoutScroll(element) {
+      if (!element?.focus) return;
+      const stage = refs.gameStage;
+      const scrollTop = stage?.scrollTop || 0;
+      const scrollLeft = stage?.scrollLeft || 0;
+      element.focus({ preventScroll: true });
+      if (stage) {
+        stage.scrollTop = scrollTop;
+        stage.scrollLeft = scrollLeft;
+      }
     }
 
     function translate(key, values) {
@@ -63,12 +79,22 @@
       refs.modelHint.textContent = translate('modelHint');
       refs.clickHint.textContent = translate('clickHint');
       refs.languageToggle.textContent = translate('language');
+      refs.languageToggle.setAttribute('aria-label', translate('switchLanguage'));
       refs.retryButton.textContent = translate('retry');
       refs.shopButton.textContent = translate('shop');
       refs.leaderboardButton.textContent = translate('leaderboard');
       refs.shopTitle.textContent = translate('shopTitle');
       refs.shopArt.alt = translate('shopArtAlt');
       refs.achievementArt.alt = translate('achievementsArtAlt');
+      refs.galleryButton.textContent = translate('gallery');
+      refs.galleryTitle.textContent = translate('galleryTitle');
+      refs.galleryModelsTitle.textContent = translate('galleryModels');
+      refs.galleryScenesTitle.textContent = translate('galleryScenes');
+      refs.galleryBanner.alt = translate('galleryBannerAlt');
+      refs.galleryCharactersArt.alt = translate('galleryCharactersAlt');
+      refs.galleryScenesArt.alt = translate('galleryScenesAlt');
+      refs.galleryBackdrop.setAttribute('aria-label', translate('close'));
+      refs.galleryClose.setAttribute('aria-label', translate('close'));
       refs.leaderboardTitle.textContent = translate('leaderboardTitle');
       refs.shopClose.setAttribute('aria-label', translate('close'));
       refs.leaderboardClose.setAttribute('aria-label', translate('close'));
@@ -202,6 +228,54 @@
       }
     }
 
+    function sceneName(index) {
+      const names = CONFIG.SCENE_NAMES?.[language] || CONFIG.SCENE_NAMES?.en || [];
+      return names[index] || `Scene ${index + 1}`;
+    }
+
+    function buildGallery() {
+      refs.galleryModelList.replaceChildren();
+      CONFIG.MODELS.forEach((source, index) => {
+        const card = document.createElement('button');
+        card.className = 'gallery-model-card';
+        card.type = 'button';
+        card.dataset.galleryModel = String(index);
+        const image = document.createElement('img');
+        image.className = 'gallery-model-image';
+        image.src = source;
+        image.draggable = false;
+        const name = document.createElement('strong');
+        name.className = 'gallery-card-name';
+        const status = document.createElement('span');
+        status.className = 'gallery-card-status';
+        card.append(image, name, status);
+        refs.galleryModelList.appendChild(card);
+      });
+
+      refs.gallerySceneList.replaceChildren();
+      CONFIG.SCENES.forEach((scene, index) => {
+        const card = document.createElement('button');
+        card.className = 'gallery-scene-card';
+        card.type = 'button';
+        card.dataset.galleryScene = String(index);
+        const background = scene?.art
+          ? `${scene.artOverlay || 'linear-gradient(155deg, rgba(20, 18, 54, 0.58), rgba(6, 8, 24, 0.82))'}, url("${scene.art}")`
+          : scene?.gradient || CONFIG.GRADIENTS?.[index] || CONFIG.GRADIENTS?.[0];
+        card.style.background = background;
+        card.style.backgroundPosition = 'center';
+        card.style.backgroundSize = 'cover';
+        const content = document.createElement('span');
+        content.className = 'gallery-card-content';
+        const name = document.createElement('strong');
+        name.className = 'gallery-card-name';
+        const status = document.createElement('span');
+        status.className = 'gallery-card-status';
+        content.append(name, status);
+        card.appendChild(content);
+        refs.gallerySceneList.appendChild(card);
+      });
+    }
+
     function renderShop(state, details) {
       buildShop();
       refs.cpsValue.textContent = translate('shopCpsEffect', { a: formatNumber(details.cps) });
@@ -244,6 +318,51 @@
         row.querySelector('[data-achievement-description]').textContent = translate(achievement.descriptionKey);
         row.querySelector('[data-achievement-status]').textContent = unlocked ? translate('unlocked') : translate('locked');
       }
+    }
+
+    function renderGallery(state, details) {
+      const modelNames = CONFIG.MODEL_NAMES[language] || CONFIG.MODEL_NAMES.en;
+      refs.gallerySummary.textContent = translate('gallerySummary', {
+        a: details.unlockedModelCount,
+        b: CONFIG.MODELS.length,
+        c: details.unlockedBackgroundCount,
+        d: CONFIG.SCENES.length
+      });
+
+      refs.galleryModelList.querySelectorAll('[data-gallery-model]').forEach((card) => {
+        const index = Number(card.dataset.galleryModel);
+        const unlocked = details.unlockedModels.includes(index);
+        const current = state.modelIdx === index;
+        const name = modelNames[index] || `Model ${index + 1}`;
+        const image = card.querySelector('.gallery-model-image');
+        card.disabled = !unlocked;
+        card.classList.toggle('is-locked', !unlocked);
+        card.classList.toggle('is-current', current);
+        card.setAttribute('aria-label', `${name}: ${unlocked ? (current ? translate('galleryCurrent') : translate('galleryAvailable')) : translate('galleryLocked', { a: CONFIG.MODEL_UNLOCKS[index] })}`);
+        image.alt = translate('modelAlt', { a: name });
+        card.querySelector('.gallery-card-name').textContent = name;
+        card.querySelector('.gallery-card-status').textContent = current
+          ? translate('galleryCurrent')
+          : unlocked
+            ? translate('galleryAvailable')
+            : translate('galleryLocked', { a: CONFIG.MODEL_UNLOCKS[index] });
+      });
+
+      refs.gallerySceneList.querySelectorAll('[data-gallery-scene]').forEach((card) => {
+        const index = Number(card.dataset.galleryScene);
+        const unlocked = index < details.unlockedBackgroundCount;
+        const current = state.bgIdx === index;
+        card.disabled = !unlocked;
+        card.classList.toggle('is-locked', !unlocked);
+        card.classList.toggle('is-current', current);
+        card.setAttribute('aria-label', `${sceneName(index)}: ${unlocked ? (current ? translate('galleryCurrent') : translate('galleryAvailable')) : translate('galleryLocked', { a: index + 1 })}`);
+        card.querySelector('.gallery-card-name').textContent = sceneName(index);
+        card.querySelector('.gallery-card-status').textContent = current
+          ? translate('galleryCurrent')
+          : unlocked
+            ? translate('galleryAvailable')
+            : translate('galleryLocked', { a: index + 1 });
+      });
     }
 
     function render(state, details) {
@@ -304,6 +423,7 @@
       refs.modelPrev.setAttribute('aria-label', translate('previous'));
       refs.modelNext.setAttribute('aria-label', translate('next'));
       renderShop(state, details);
+      renderGallery(state, details);
     }
 
     function spawnPoints(x, y, value) {
@@ -356,7 +476,7 @@
       refs.shopBackdrop.classList.add('is-visible');
       refs.shopSheet.classList.add('is-visible');
       refs.shopSheet.setAttribute('aria-hidden', 'false');
-      refs.shopClose.focus();
+      focusWithoutScroll(refs.shopClose);
     }
 
     function closeShop() {
@@ -366,8 +486,27 @@
       const focusTarget = shopReturnFocus && document.contains(shopReturnFocus)
         ? shopReturnFocus
         : refs.shopButton;
-      focusTarget?.focus();
+      focusWithoutScroll(focusTarget);
       shopReturnFocus = null;
+    }
+
+    function openGallery() {
+      galleryReturnFocus = document.activeElement;
+      refs.galleryBackdrop.classList.add('is-visible');
+      refs.gallerySheet.classList.add('is-visible');
+      refs.gallerySheet.setAttribute('aria-hidden', 'false');
+      focusWithoutScroll(refs.galleryClose);
+    }
+
+    function closeGallery() {
+      refs.galleryBackdrop.classList.remove('is-visible');
+      refs.gallerySheet.classList.remove('is-visible');
+      refs.gallerySheet.setAttribute('aria-hidden', 'true');
+      const focusTarget = galleryReturnFocus && document.contains(galleryReturnFocus)
+        ? galleryReturnFocus
+        : refs.galleryButton;
+      focusWithoutScroll(focusTarget);
+      galleryReturnFocus = null;
     }
 
     let leaderboardReturnFocus = null;
@@ -414,7 +553,7 @@
       refs.leaderboardBackdrop.classList.add('is-visible');
       refs.leaderboardSheet.classList.add('is-visible');
       refs.leaderboardSheet.setAttribute('aria-hidden', 'false');
-      refs.leaderboardClose.focus();
+      focusWithoutScroll(refs.leaderboardClose);
       refs.leaderboardStatus.textContent = translate('loading');
       try {
         if (typeof Leaderboard !== 'undefined') {
@@ -436,12 +575,17 @@
       const focusTarget = leaderboardReturnFocus && document.contains(leaderboardReturnFocus)
         ? leaderboardReturnFocus
         : refs.leaderboardButton;
-      focusTarget?.focus();
+      focusWithoutScroll(focusTarget);
       leaderboardReturnFocus = null;
     }
 
     function getShopFocusableElements() {
       return [refs.shopClose, ...refs.shopList.querySelectorAll('button:not(:disabled)')]
+        .filter((node) => node && !node.closest('.is-hidden'));
+    }
+
+    function getGalleryFocusableElements() {
+      return [refs.galleryClose, ...refs.galleryModelList.querySelectorAll('button:not(:disabled)'), ...refs.gallerySceneList.querySelectorAll('button:not(:disabled)')]
         .filter((node) => node && !node.closest('.is-hidden'));
     }
 
@@ -470,6 +614,7 @@
         cache();
         setLanguage(language);
         buildShop();
+        buildGallery();
       },
       setLanguage,
       toggleLanguage,
@@ -485,11 +630,15 @@
       translate,
       openShop,
       closeShop,
+      openGallery,
+      closeGallery,
       openLeaderboard,
       closeLeaderboard,
       isShopOpen: () => refs.shopSheet.classList.contains('is-visible'),
+      isGalleryOpen: () => refs.gallerySheet.classList.contains('is-visible'),
       isLeaderboardOpen: () => refs.leaderboardSheet.classList.contains('is-visible'),
       getShopFocusableElements,
+      getGalleryFocusableElements,
       setEventActive,
       setEventPosition,
       getEventPoint,

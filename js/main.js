@@ -512,6 +512,27 @@
     requestSave();
   }
 
+  function selectBackground(index) {
+    const candidate = integer(index, -1);
+    const details = detailsFor();
+    if (candidate < 0 || candidate >= details.unlockedBackgroundCount) return;
+    state.bgIdx = candidate;
+    UI.render(state, detailsFor());
+    UI.closeGallery();
+    requestSave();
+  }
+
+  function selectModel(index) {
+    const candidate = integer(index, -1);
+    const details = detailsFor();
+    if (!details.unlockedModels.includes(candidate)) return;
+    state.modelIdx = candidate;
+    hitMap = null;
+    UI.render(state, detailsFor());
+    UI.closeGallery();
+    requestSave();
+  }
+
   function bindEvents() {
     if (bound) return;
     bound = true;
@@ -528,6 +549,17 @@
       UI.render(state, detailsFor());
     });
     document.getElementById('retry-button').addEventListener('click', boot);
+    document.getElementById('gallery-button').addEventListener('click', () => UI.openGallery());
+    document.getElementById('gallery-close').addEventListener('click', () => UI.closeGallery());
+    document.getElementById('gallery-backdrop').addEventListener('click', () => UI.closeGallery());
+    document.getElementById('gallery-model-list').addEventListener('click', (event) => {
+      const button = event.target.closest('button[data-gallery-model]');
+      if (button) selectModel(button.dataset.galleryModel);
+    });
+    document.getElementById('gallery-scene-list').addEventListener('click', (event) => {
+      const button = event.target.closest('button[data-gallery-scene]');
+      if (button) selectBackground(button.dataset.galleryScene);
+    });
     document.getElementById('shop-button').addEventListener('click', () => UI.openShop());
     document.getElementById('leaderboard-button').addEventListener('click', () => UI.openLeaderboard());
     document.getElementById('leaderboard-close').addEventListener('click', () => UI.closeLeaderboard());
@@ -546,15 +578,23 @@
           UI.closeLeaderboard();
           return;
         }
+        if (UI.isGalleryOpen()) {
+          event.preventDefault();
+          UI.closeGallery();
+          return;
+        }
         if (UI.isShopOpen()) {
           event.preventDefault();
           UI.closeShop();
           return;
         }
       }
-      if (!UI.isShopOpen()) return;
       if (event.key !== 'Tab') return;
-      const focusable = UI.getShopFocusableElements();
+      const focusable = UI.isShopOpen()
+        ? UI.getShopFocusableElements()
+        : UI.isGalleryOpen()
+          ? UI.getGalleryFocusableElements()
+          : [];
       if (!focusable.length) return;
       const currentIndex = focusable.indexOf(document.activeElement);
       const nextIndex = event.shiftKey

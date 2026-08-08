@@ -134,14 +134,17 @@
                 <div class="footer-row">
                   <span class="footer-brand"><span aria-hidden="true">✦</span> STORY MODE</span>
                   <div class="footer-actions">
+                    <button id="gallery-button" class="gallery-button" type="button">COLLECTION</button>
                     <button id="leaderboard-button" class="leaderboard-button" type="button">LEADERBOARD</button>
                     <button id="shop-button" class="shop-button" type="button">SHOP</button>
                     <span id="save-status" class="save-status">Playing offline</span>
                   </div>
                 </div>
               </section>
-            </div>
 
+            </div>
+          </div>
+          <div class="overlay-layer">
             <button id="shop-backdrop" class="shop-backdrop" type="button" aria-label="Close shop"></button>
             <section id="shop-sheet" class="shop-sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="shop-title" tabindex="-1">
               <div class="shop-sheet-header">
@@ -160,6 +163,31 @@
               </div>
               <img id="achievement-art" class="achievement-art" src="assets/illustrations/achievement-constellation.png" alt="Constellation of unlocked achievements" draggable="false">
               <div id="achievement-list" class="achievement-list"></div>
+            </section>
+
+            <button id="gallery-backdrop" class="gallery-backdrop" type="button" aria-label="Close collection"></button>
+            <section id="gallery-sheet" class="gallery-sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="gallery-title" tabindex="-1">
+              <div class="gallery-sheet-header">
+                <div>
+                  <span class="eyebrow">COLLECTION</span>
+                  <h2 id="gallery-title">Cosmic archive</h2>
+                  <p id="gallery-summary">1 / 18 models · 1 / 15 scenes unlocked</p>
+                </div>
+                <button id="gallery-close" class="gallery-close" type="button" aria-label="Close">×</button>
+              </div>
+              <img id="gallery-banner" class="gallery-banner" src="assets/illustrations/gallery-banner.png" alt="Celestial archive gallery" draggable="false">
+              <div class="gallery-section-heading">
+                <span id="gallery-models-title" class="eyebrow">CHARACTER ARCHIVE</span>
+                <span class="gallery-count" aria-hidden="true">18</span>
+              </div>
+              <img id="gallery-characters-art" class="gallery-section-art" src="assets/illustrations/gallery-characters.png" alt="Orbiting character wardrobe" draggable="false">
+              <div id="gallery-model-list" class="gallery-card-grid gallery-model-grid"></div>
+              <div class="gallery-section-heading">
+                <span id="gallery-scenes-title" class="eyebrow">SCENERY ARCHIVE</span>
+                <span class="gallery-count" aria-hidden="true">15</span>
+              </div>
+              <img id="gallery-scenes-art" class="gallery-section-art" src="assets/illustrations/gallery-scenes.png" alt="Cosmic scenery index" draggable="false">
+              <div id="gallery-scene-list" class="gallery-card-grid gallery-scene-grid"></div>
             </section>
 
             <button id="leaderboard-backdrop" class="leaderboard-backdrop" type="button" aria-label="Close leaderboard"></button>
