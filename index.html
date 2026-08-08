@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#11102e">
+    <meta name="description" content="Anime Clicker: a cozy portrait clicker for Yandex Games.">
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <title>Anime Clicker</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://sdk.games.s3.yandex.net/sdk.js" defer></script>
+    <script src="js/config.js" defer></script>
+    <script src="js/sdk.js" defer></script>
+    <script src="js/ui.js" defer></script>
+    <script src="js/main.js" defer></script>
+  </head>
+  <body>
+    <div id="app" class="app">
+      <section id="loading-screen" class="loading-screen" aria-live="polite">
+        <div class="loading-orbit" aria-hidden="true">
+          <span class="loading-orbit-ring"></span>
+          <img src="assets/icon.png" alt="" class="loading-icon">
+          <span class="loading-star loading-star-one">✦</span>
+          <span class="loading-star loading-star-two">✧</span>
+        </div>
+        <p id="loading-label" class="loading-label">Preparing your story…</p>
+        <p id="loading-hint" class="loading-hint">Loading illustrations</p>
+        <div class="loading-progress" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <span id="loading-bar"></span>
+        </div>
+        <button id="retry-button" class="retry-button is-hidden" type="button">Try again</button>
+      </section>
+
+      <main id="game-shell" class="game-shell is-hidden" aria-label="Anime Clicker">
+        <div id="stage-viewport" class="stage-viewport">
+          <div id="game-stage" class="game-stage" data-tone="light">
+            <div id="gradient-current" class="gradient-layer gradient-current"></div>
+            <div id="gradient-next" class="gradient-layer gradient-next"></div>
+            <div class="stage-glow stage-glow-top" aria-hidden="true"></div>
+            <div class="stage-glow stage-glow-bottom" aria-hidden="true"></div>
+            <div class="stage-grain" aria-hidden="true"></div>
+
+            <div class="stage-content">
+              <header class="topbar">
+                <div class="brand-row">
+                  <div class="brand-lockup">
+                    <span class="brand-mark" aria-hidden="true">✦</span>
+                    <span class="brand-name">ANIME CLICKER</span>
+                  </div>
+                  <button id="language-toggle" class="language-toggle" type="button" aria-label="Switch language">RU</button>
+                </div>
+
+                <div class="hero-copy">
+                  <h1 id="app-title">Anime Clicker</h1>
+                  <p id="app-subtitle">Tap the light to grow your story</p>
+                </div>
+
+                <div class="score-row">
+                  <div class="level-block">
+                    <div class="level-line">
+                      <span class="eyebrow">PROGRESS</span>
+                      <span id="level-label" class="level-label">LEVEL 1 / 15</span>
+                    </div>
+                    <div class="progress-track" aria-hidden="true">
+                      <span id="progress-fill" class="progress-fill"></span>
+                      <span class="progress-spark"></span>
+                    </div>
+                    <p id="progress-copy" class="progress-copy">100 pts to next level</p>
+                    <span id="combo-label" class="combo-label" aria-live="polite"></span>
+                  </div>
+
+                  <div class="points-block">
+                    <span id="points-caption" class="eyebrow">POINTS</span>
+                    <strong id="points-value" class="points-value">0</strong>
+                    <span id="total-earned" class="total-earned">0 total earned</span>
+                    <span id="cps-value" class="cps-value">+0 CPS</span>
+                  </div>
+                </div>
+              </header>
+
+              <section class="play-area" aria-label="Character click area">
+                <div class="play-orbit play-orbit-large" aria-hidden="true"></div>
+                <div class="play-orbit play-orbit-small" aria-hidden="true"></div>
+                <div class="model-shadow" aria-hidden="true"></div>
+                <p id="click-hint" class="click-hint">TAP TO COLLECT</p>
+                <div id="toast" class="toast" role="status" aria-live="polite"></div>
+                <button id="event-star" class="event-star" type="button" aria-hidden="true" aria-label="Collect Starlight" tabindex="-1">✦<span>STARLIGHT</span></button>
+                <div id="model-frame" class="model-frame">
+                  <img id="model-image" class="model-image" src="assets/models/girl1.png" alt="Petal, click character" draggable="false" tabindex="0">
+                </div>
+                <span class="tap-ring tap-ring-one" aria-hidden="true"></span>
+                <span class="tap-ring tap-ring-two" aria-hidden="true"></span>
+              </section>
+
+              <section class="controls" aria-label="Game controls">
+                <div class="upgrade-panel control-panel">
+                  <div class="control-copy">
+                    <div class="control-heading">
+                      <span id="upgrade-kicker" class="eyebrow">CLICK POWER</span>
+                      <span id="power-value" class="power-value">×1</span>
+                    </div>
+                    <p id="per-click" class="control-title">+1 per click</p>
+                    <p id="upgrade-status" class="control-subtitle">50 POINTS</p>
+                  </div>
+                  <button id="upgrade-button" class="primary-button" type="button">
+                    <span id="upgrade-label">POWER 1 → 2</span>
+                    <span id="upgrade-cost">50 POINTS</span>
+                  </button>
+                </div>
+
+                <div class="selector-grid">
+                  <div class="selector-panel control-panel">
+                    <button id="background-prev" class="nav-button" type="button" aria-label="Previous background">‹</button>
+                    <div class="selector-copy">
+                      <span id="background-kicker" class="eyebrow">SCENERY</span>
+                      <strong id="background-label">Background 1 / 1</strong>
+                      <span id="background-hint" class="selector-hint">Unlocked scenes</span>
+                    </div>
+                    <button id="background-next" class="nav-button" type="button" aria-label="Next background">›</button>
+                  </div>
+
+                  <div class="selector-panel control-panel">
+                    <button id="model-prev" class="nav-button" type="button" aria-label="Previous model">‹</button>
+                    <div class="selector-copy">
+                      <span id="model-kicker" class="eyebrow">CHARACTER</span>
+                      <strong id="model-label">Petal · 1 / 6</strong>
+                      <span id="model-hint" class="selector-hint">1 unlocked model</span>
+                    </div>
+                    <button id="model-next" class="nav-button" type="button" aria-label="Next model">›</button>
+                  </div>
+                </div>
+
+                <div class="footer-row">
+                  <span class="footer-brand"><span aria-hidden="true">✦</span> STORY MODE</span>
+                  <div class="footer-actions">
+                    <button id="shop-button" class="shop-button" type="button">SHOP</button>
+                    <span id="save-status" class="save-status">Playing offline</span>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <button id="shop-backdrop" class="shop-backdrop" type="button" aria-label="Close shop"></button>
+            <section id="shop-sheet" class="shop-sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="shop-title" tabindex="-1">
+              <div class="shop-sheet-header">
+                <div>
+                  <span class="eyebrow">SHOP</span>
+                  <h2 id="shop-title">Starlight Shop</h2>
+                  <p id="shop-summary">0 / 10 achievements unlocked</p>
+                </div>
+                <button id="shop-close" class="shop-close" type="button" aria-label="Close">×</button>
+              </div>
+              <div id="shop-list" class="shop-list"></div>
+              <div class="achievement-heading">
+                <span id="achievements-title" class="eyebrow">ACHIEVEMENTS</span>
+                <span id="achievement-count" aria-hidden="true"></span>
+              </div>
+              <div id="achievement-list" class="achievement-list"></div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

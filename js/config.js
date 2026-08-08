@@ -1,0 +1,272 @@
+/* All game data lives in one tuning file. Every number is static by design:
+   difficulty never adapts at runtime. */
+window.CONFIG = {
+  STAGE_WIDTH: 540,
+  STAGE_HEIGHT: 960,
+  MAX_LEVEL: 15,
+  ICON: 'assets/icon.png',
+
+  // Cumulative TOTAL EARNED points needed to reach each level (index 0 = level 1).
+  LEVELS: [0, 100, 260, 520, 930, 1580, 2630, 4310, 6990, 11290, 18160, 29150, 46750, 74890, 119930],
+
+  // Index 0 is the starting power. Each purchase moves to the next power.
+  CLICK_UPGRADES: {
+    POWERS: [1, 2, 3, 5, 7, 10, 14, 18, 23, 29, 36, 43, 50],
+    COSTS: [50, 150, 400, 900, 1800, 3300, 5600, 9000, 13800, 20500, 29500, 41500]
+  },
+
+  // Level at which each model (girl) unlocks.
+  MODEL_UNLOCKS: [1, 3, 5, 8, 11, 15],
+  MODELS: [
+    'assets/models/girl1.png',
+    'assets/models/girl2.png',
+    'assets/models/girl3.png',
+    'assets/models/girl4.png',
+    'assets/models/girl5.png',
+    'assets/models/girl6.png'
+  ],
+  SHOP_ITEMS: [
+    {
+      id: 'autoClickers',
+      nameKey: 'shopPocketAssistant',
+      descriptionKey: 'shopPocketAssistantDesc',
+      effectKey: 'shopCpsEffect',
+      unlockLevel: 3,
+      max: 25,
+      baseCost: 100,
+      growth: 1.35
+    },
+    {
+      id: 'focusLevel',
+      nameKey: 'shopFocusCharm',
+      descriptionKey: 'shopFocusCharmDesc',
+      effectKey: 'shopFocusEffect',
+      unlockLevel: 5,
+      max: 5,
+      baseCost: 300,
+      growth: 1.6
+    },
+    {
+      id: 'lensLevel',
+      nameKey: 'shopStarlightLens',
+      descriptionKey: 'shopStarlightLensDesc',
+      effectKey: 'shopLensEffect',
+      unlockLevel: 8,
+      max: 4,
+      baseCost: 450,
+      growth: 1.65
+    }
+  ],
+  ACHIEVEMENTS: [
+    { id: 'first_click', titleKey: 'achievementFirstClick', descriptionKey: 'achievementFirstClickDesc' },
+    { id: 'earned_100', titleKey: 'achievementEarned100', descriptionKey: 'achievementEarned100Desc' },
+    { id: 'earned_1000', titleKey: 'achievementEarned1000', descriptionKey: 'achievementEarned1000Desc' },
+    { id: 'manual_100', titleKey: 'achievementManual100', descriptionKey: 'achievementManual100Desc' },
+    { id: 'combo_10', titleKey: 'achievementCombo10', descriptionKey: 'achievementCombo10Desc' },
+    { id: 'event_first', titleKey: 'achievementEventFirst', descriptionKey: 'achievementEventFirstDesc' },
+    { id: 'auto_first', titleKey: 'achievementAutoFirst', descriptionKey: 'achievementAutoFirstDesc' },
+    { id: 'auto_10', titleKey: 'achievementAuto10', descriptionKey: 'achievementAuto10Desc' },
+    { id: 'shop_first', titleKey: 'achievementShopFirst', descriptionKey: 'achievementShopFirstDesc' },
+    { id: 'level_15', titleKey: 'achievementLevel15', descriptionKey: 'achievementLevel15Desc' }
+  ],
+  COMBO_WINDOW_MS: 1200,
+  COMBO_MAX: 20,
+  COMBO_STEP: 5,
+  STAR_SPAWN_MIN_MS: 18000,
+  STAR_SPAWN_MAX_MS: 30000,
+  STAR_LIFETIME_MS: 8000,
+  MODEL_NAMES: {
+    en: ['Petal', 'Sunbeam', 'Tide', 'Verdant', 'Prism', 'Starlight'],
+    ru: ['Лепесток', 'Солнышко', 'Прилив', 'Вердант', 'Призма', 'Звезда']
+  },
+
+  // One scene per level, auto-applied on level-up; players can cycle unlocked ones.
+  SCENES: [
+    { tone: 'light', gradient: 'linear-gradient(155deg, #fff6f8 0%, #ffd7e4 48%, #f5b0c8 100%)' }, // 1 pastel pink
+    { tone: 'light', gradient: 'linear-gradient(155deg, #fff7e9 0%, #ffdbaf 48%, #f5bd91 100%)' }, // 2 peach
+    { tone: 'light', gradient: 'linear-gradient(155deg, #fff1d8 0%, #ffd391 45%, #efaa9d 100%)' }, // 3 sunset
+    { tone: 'light', gradient: 'linear-gradient(155deg, #effaff 0%, #c9eaf5 48%, #a6cae6 100%)' }, // 4 sky
+    { tone: 'light', gradient: 'linear-gradient(155deg, #e8fbfb 0%, #b7e7e7 46%, #84c9df 100%)' }, // 5 ocean
+    { tone: 'light', gradient: 'linear-gradient(155deg, #effbdc 0%, #cee9b0 44%, #a8d3a8 100%)' }, // 6 meadow
+    { tone: 'light', gradient: 'linear-gradient(155deg, #e4f8e5 0%, #b4dfbb 46%, #83bfae 100%)' }, // 7 forest
+    { tone: 'light', gradient: 'linear-gradient(155deg, #f1eafd 0%, #d7c7ef 48%, #b7a1dc 100%)' }, // 8 lavender
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #514277 0%, #2f2856 46%, #18183a 100%)' }, // 9 violet
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #5c2c68 0%, #2f1e4c 45%, #17152f 100%)' }, // 10 neon pink
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #284d78 0%, #213353 42%, #141c38 100%)' }, // 11 neon mix
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #54396e 0%, #302653 47%, #18152f 100%)' }, // 12 dusk
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #352a68 0%, #1e1b47 48%, #0e102a 100%)' }, // 13 deep violet
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #2c2b66 0%, #171838 46%, #0b0c22 100%)' }, // 14 night
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #302553 0%, #141733 45%, #070914 100%)' } // 15 galaxy
+  ],
+
+  STRINGS: {
+    en: {
+      title: 'Anime Clicker',
+      subtitle: 'Tap the light to grow your story',
+      level: 'LEVEL {a} / {b}',
+      nextLevel: '{a} pts to next level',
+      maxLevel: 'MAX LEVEL REACHED',
+      perClick: '+{a} per click',
+      points: 'POINTS',
+      total: '{a} total earned',
+      upgradeKicker: 'CLICK POWER',
+      btnPower: 'POWER {a}  →  {b}',
+      btnMax: 'POWER MAX',
+      cost: '{a} POINTS',
+      insufficient: 'Need {a} more',
+      backgroundKicker: 'SCENERY',
+      background: 'Background {a} / {b}',
+      backgroundHint: 'Unlocked scenes',
+      modelKicker: 'CHARACTER',
+      model: '{a} · {b} / {c}',
+      modelHint: 'Unlocked models',
+      newLevel: 'Level {a} reached',
+      newModel: 'New model unlocked',
+      loading: 'Preparing your story…',
+      loadingHint: 'Loading illustrations',
+      loadError: 'Illustrations could not load',
+      retry: 'Try again',
+      loadRetryHint: 'Check the connection, then try again',
+      saving: 'Saving…',
+      saved: 'Progress saved',
+      offline: 'Playing offline',
+      language: 'RU',
+      previous: 'Previous',
+      next: 'Next',
+      clickHint: 'TAP TO COLLECT',
+      locked: 'LOCKED',
+      modelAlt: '{a}, click character',
+      shop: 'SHOP',
+      shopTitle: 'Starlight Shop',
+      shopSummary: '{a} / {b} achievements unlocked',
+      close: 'Close',
+      shopLocked: 'Unlocks at level {a}',
+      max: 'MAX',
+      shopCost: '{a} POINTS',
+      shopLevel: 'LEVEL {a} / {b}',
+      shopPocketAssistant: 'Pocket Assistant',
+      shopPocketAssistantDesc: 'A tiny helper that keeps collecting while you are here.',
+      shopCpsEffect: '+{a} CPS',
+      shopFocusCharm: 'Focus Charm',
+      shopFocusCharmDesc: 'Make every manual click hit harder.',
+      shopFocusEffect: '+{a} manual power',
+      shopStarlightLens: 'Starlight Lens',
+      shopStarlightLensDesc: 'Amplify rewards from Starlight events.',
+      shopLensEffect: '+{a}% event reward',
+      shopBought: '{a} upgraded',
+      achievements: 'ACHIEVEMENTS',
+      achievementUnlocked: 'Achievement unlocked: {a}',
+      unlocked: 'UNLOCKED',
+      starEvent: 'STARLIGHT',
+      starReward: '+{a}',
+      combo: 'COMBO {a}',
+      comboNext: 'Next bonus at {a}',
+      achievementFirstClick: 'First spark',
+      achievementFirstClickDesc: 'Make your first manual click.',
+      achievementEarned100: 'Warm signal',
+      achievementEarned100Desc: 'Earn 100 total points.',
+      achievementEarned1000: 'Bright signal',
+      achievementEarned1000Desc: 'Earn 1,000 total points.',
+      achievementManual100: 'Steady hands',
+      achievementManual100Desc: 'Make 100 manual clicks.',
+      achievementCombo10: 'In the zone',
+      achievementCombo10Desc: 'Reach combo 10.',
+      achievementEventFirst: 'Star chaser',
+      achievementEventFirstDesc: 'Collect your first Starlight event.',
+      achievementAutoFirst: 'Little helper',
+      achievementAutoFirstDesc: 'Buy your first Pocket Assistant.',
+      achievementAuto10: 'Crew assembled',
+      achievementAuto10Desc: 'Buy 10 Pocket Assistants.',
+      achievementShopFirst: 'New supplies',
+      achievementShopFirstDesc: 'Make your first shop purchase.',
+      achievementLevel15: 'Full constellation',
+      achievementLevel15Desc: 'Reach level 15.'
+    },
+    ru: {
+      title: 'Аниме Кликер',
+      subtitle: 'Нажимай на свет, развивай историю',
+      level: 'УРОВЕНЬ {a} / {b}',
+      nextLevel: '{a} очк. до нового уровня',
+      maxLevel: 'МАКСИМАЛЬНЫЙ УРОВЕНЬ',
+      perClick: '+{a} за клик',
+      points: 'ОЧКИ',
+      total: '{a} всего заработано',
+      upgradeKicker: 'СИЛА КЛИКА',
+      btnPower: 'СИЛА {a}  →  {b}',
+      btnMax: 'СИЛА МАКС',
+      cost: '{a} ОЧКОВ',
+      insufficient: 'Нужно ещё {a}',
+      backgroundKicker: 'СЦЕНА',
+      background: 'Фон {a} / {b}',
+      backgroundHint: 'Открытые сцены',
+      modelKicker: 'ГЕРОИНЯ',
+      model: '{a} · {b} / {c}',
+      modelHint: 'Открытые модели',
+      newLevel: 'Достигнут уровень {a}',
+      newModel: 'Новая модель открыта',
+      loading: 'Готовим твою историю…',
+      loadingHint: 'Загружаем иллюстрации',
+      loadError: 'Не удалось загрузить иллюстрации',
+      retry: 'Повторить',
+      loadRetryHint: 'Проверь соединение и попробуй ещё раз',
+      saving: 'Сохраняем…',
+      saved: 'Прогресс сохранён',
+      offline: 'Играем офлайн',
+      language: 'EN',
+      previous: 'Назад',
+      next: 'Вперёд',
+      clickHint: 'НАЖМИ, ЧТОБЫ СОБРАТЬ',
+      locked: 'ЗАКРЫТО',
+      modelAlt: '{a}, персонаж для клика',
+      shop: 'МАГАЗИН',
+      shopTitle: 'Магазин звёздного света',
+      shopSummary: '{a} / {b} достижений открыто',
+      close: 'Закрыть',
+      shopLocked: 'Откроется на уровне {a}',
+      max: 'МАКС',
+      shopCost: '{a} ОЧКОВ',
+      shopLevel: 'УРОВЕНЬ {a} / {b}',
+      shopPocketAssistant: 'Карманный помощник',
+      shopPocketAssistantDesc: 'Маленький помощник собирает очки, пока страница открыта.',
+      shopCpsEffect: '+{a} в сек.',
+      shopFocusCharm: 'Талисман фокуса',
+      shopFocusCharmDesc: 'Усиль каждый ручной клик.',
+      shopFocusEffect: '+{a} к силе клика',
+      shopStarlightLens: 'Линза звёздного света',
+      shopStarlightLensDesc: 'Увеличь награды за события Starlight.',
+      shopLensEffect: '+{a}% к награде события',
+      shopBought: '{a} улучшен',
+      achievements: 'ДОСТИЖЕНИЯ',
+      achievementUnlocked: 'Достижение открыто: {a}',
+      unlocked: 'ОТКРЫТО',
+      starEvent: 'ЗВЁЗДНЫЙ СВЕТ',
+      starReward: '+{a}',
+      combo: 'КОМБО {a}',
+      comboNext: 'Следующий бонус на {a}',
+      achievementFirstClick: 'Первая искра',
+      achievementFirstClickDesc: 'Сделай первый ручной клик.',
+      achievementEarned100: 'Тёплый сигнал',
+      achievementEarned100Desc: 'Заработай 100 очков всего.',
+      achievementEarned1000: 'Яркий сигнал',
+      achievementEarned1000Desc: 'Заработай 1 000 очков всего.',
+      achievementManual100: 'Точные руки',
+      achievementManual100Desc: 'Сделай 100 ручных кликов.',
+      achievementCombo10: 'В потоке',
+      achievementCombo10Desc: 'Достигни комбо 10.',
+      achievementEventFirst: 'Охотник за звёздами',
+      achievementEventFirstDesc: 'Собери первое событие Starlight.',
+      achievementAutoFirst: 'Маленький помощник',
+      achievementAutoFirstDesc: 'Купи первого карманного помощника.',
+      achievementAuto10: 'Команда собрана',
+      achievementAuto10Desc: 'Купи 10 карманных помощников.',
+      achievementShopFirst: 'Новые припасы',
+      achievementShopFirstDesc: 'Сделай первую покупку в магазине.',
+      achievementLevel15: 'Полное созвездие',
+      achievementLevel15Desc: 'Достигни 15 уровня.'
+    }
+  }
+};
+
+// Keep the original parallel arrays available for UI and save-compatible code.
+window.CONFIG.GRADIENTS = window.CONFIG.SCENES.map((scene) => scene.gradient);
+window.CONFIG.BACKGROUND_TONES = window.CONFIG.SCENES.map((scene) => scene.tone);
