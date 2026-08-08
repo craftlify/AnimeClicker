@@ -97,6 +97,9 @@
                 <div class="upgrade-panel control-panel">
                   <div class="control-copy">
                     <div class="control-heading">
+                      <span class="control-icon" aria-hidden="true">
+                        <svg class="ui-icon" viewBox="0 0 24 24" focusable="false"><path d="m12 2 1.7 6.3L20 10l-6.3 1.7L12 18l-1.7-6.3L4 10l6.3-1.7L12 2Z"/><path d="m19 15 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15Z"/></svg>
+                      </span>
                       <span id="upgrade-kicker" class="eyebrow">CLICK POWER</span>
                       <span id="power-value" class="power-value">×1</span>
                     </div>
@@ -109,35 +112,52 @@
                   </button>
                 </div>
 
-                <div class="selector-grid">
-                  <div class="selector-panel control-panel">
-                    <button id="background-prev" class="nav-button" type="button" aria-label="Previous background">‹</button>
-                    <div class="selector-copy">
-                      <span id="background-kicker" class="eyebrow">SCENERY</span>
-                      <strong id="background-label">Background 1 / 1</strong>
-                      <span id="background-hint" class="selector-hint">Unlocked scenes</span>
-                      <button id="background-recommended" class="recommended-button" type="button">USE RECOMMENDED</button>
-                    </div>
-                    <button id="background-next" class="nav-button" type="button" aria-label="Next background">›</button>
-                  </div>
+                <button id="gallery-button" class="customize-trigger control-panel" type="button" aria-haspopup="dialog" aria-controls="gallery-sheet">
+                  <span class="customize-trigger-icon" aria-hidden="true">
+                    <svg class="ui-icon" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.1 2.4 3.2 5.2 3.2 8.5S14.1 18.1 12 20.5M12 3.5c-2.1 2.4-3.2 5.2-3.2 8.5S9.9 18.1 12 20.5"/><path d="m17.5 3.8.7 2.1 2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7.7-2.1Z"/></svg>
+                  </span>
+                  <span class="customize-trigger-copy">
+                    <span id="customize-kicker" class="eyebrow">LOOK</span>
+                    <strong id="customize-label">Sunbeam · Solar peach</strong>
+                    <span id="customize-hint" class="customize-trigger-hint">Character + scenery</span>
+                  </span>
+                  <span class="customize-trigger-chevron" aria-hidden="true">›</span>
+                </button>
 
-                  <div class="selector-panel control-panel">
-                    <button id="model-prev" class="nav-button" type="button" aria-label="Previous model">‹</button>
-                    <div class="selector-copy">
-                      <span id="model-kicker" class="eyebrow">CHARACTER</span>
-                      <strong id="model-label">Petal · 1 / 18</strong>
-                      <span id="model-hint" class="selector-hint">1 / 18 unlocked models</span>
+                <div class="legacy-selector-hooks" aria-hidden="true">
+                  <div class="selector-grid">
+                    <div class="selector-panel control-panel">
+                      <button id="background-prev" class="nav-button" type="button" aria-label="Previous background">‹</button>
+                      <div class="selector-copy">
+                        <span id="background-kicker" class="eyebrow">SCENERY</span>
+                        <strong id="background-label">Background 1 / 1</strong>
+                        <span id="background-hint" class="selector-hint">Unlocked scenes</span>
+                        <button id="background-recommended" class="recommended-button" type="button">USE RECOMMENDED</button>
+                      </div>
+                      <button id="background-next" class="nav-button" type="button" aria-label="Next background">›</button>
                     </div>
-                    <button id="model-next" class="nav-button" type="button" aria-label="Next model">›</button>
+
+                    <div class="selector-panel control-panel">
+                      <button id="model-prev" class="nav-button" type="button" aria-label="Previous model">‹</button>
+                      <div class="selector-copy">
+                        <span id="model-kicker" class="eyebrow">CHARACTER</span>
+                        <strong id="model-label">Sunbeam · 2 / 18</strong>
+                        <span id="model-hint" class="selector-hint">8 / 18 unlocked models</span>
+                      </div>
+                      <button id="model-next" class="nav-button" type="button" aria-label="Next model">›</button>
+                    </div>
                   </div>
                 </div>
 
                 <div class="footer-row">
                   <span class="footer-brand"><span aria-hidden="true">✦</span> STORY MODE</span>
                   <div class="footer-actions">
-                    <button id="gallery-button" class="gallery-button" type="button">COLLECTION</button>
-                    <button id="leaderboard-button" class="leaderboard-button" type="button">LEADERBOARD</button>
-                    <button id="shop-button" class="shop-button" type="button">SHOP</button>
+                    <button id="leaderboard-button" class="leaderboard-button footer-action" type="button" aria-label="LEADERBOARD">
+                      <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19.5V12h4v7.5M10 19.5V5h4v14.5M16 19.5V8h4v11.5"/><path d="M3 21h18"/></svg><span data-button-label>LEADERBOARD</span>
+                    </button>
+                    <button id="shop-button" class="shop-button footer-action" type="button" aria-label="SHOP">
+                      <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5.5 8.5h13l1 11h-15l1-11Z"/><path d="M8.5 8.5V6.8a3.5 3.5 0 0 1 7 0v1.7"/><path d="m18.2 3.2.6 1.8 1.8.6-1.8.6-.6 1.8-.6-1.8-1.8-.6 1.8-.6.6-1.8Z"/></svg><span data-button-label>SHOP</span>
+                    </button>
                     <span id="save-status" class="save-status">Playing offline</span>
                   </div>
                 </div>
@@ -170,25 +190,37 @@
             <section id="gallery-sheet" class="gallery-sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="gallery-title" tabindex="-1">
               <div class="gallery-sheet-header">
                 <div>
-                  <span class="eyebrow">COLLECTION</span>
-                  <h2 id="gallery-title">Cosmic archive</h2>
+                  <span id="gallery-kicker" class="eyebrow">LOOK</span>
+                  <h2 id="gallery-title">Choose your look</h2>
                   <p id="gallery-summary">1 / 18 models · 1 / 18 scenes unlocked</p>
                 </div>
                 <button id="gallery-close" class="gallery-close" type="button" aria-label="Close">×</button>
               </div>
-              <img id="gallery-banner" class="gallery-banner" src="assets/illustrations/gallery-banner.png" alt="Celestial archive gallery" draggable="false">
-              <div class="gallery-section-heading">
-                <span id="gallery-models-title" class="eyebrow">CHARACTER ARCHIVE</span>
-                <span class="gallery-count" aria-hidden="true">18</span>
+              <img id="gallery-banner" class="gallery-banner" src="assets/illustrations/customize-banner.png" alt="Celestial style picker" draggable="false">
+              <div class="gallery-tabs" role="tablist" aria-label="Choose character or scenery">
+                <button id="gallery-model-tab" class="gallery-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="gallery-model-view">
+                  <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="3"/><path d="M5.5 20c.8-3.1 2.9-4.7 6.5-4.7s5.7 1.6 6.5 4.7"/></svg><span data-tab-label>CHARACTER</span>
+                </button>
+                <button id="gallery-scene-tab" class="gallery-tab" type="button" role="tab" aria-selected="false" aria-controls="gallery-scene-view">
+                  <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.5 19.5 9 12l4 4 2.8-3.5 4.7 7"/><path d="M3 20.5h18"/><circle cx="17.5" cy="6.5" r="1.5"/></svg><span data-tab-label>SCENERY</span>
+                </button>
               </div>
-              <img id="gallery-characters-art" class="gallery-section-art" src="assets/illustrations/gallery-characters.png" alt="Orbiting character wardrobe" draggable="false">
-              <div id="gallery-model-list" class="gallery-card-grid gallery-model-grid"></div>
-              <div class="gallery-section-heading">
-                <span id="gallery-scenes-title" class="eyebrow">SCENERY ARCHIVE</span>
-                <span class="gallery-count" aria-hidden="true">18</span>
+              <div id="gallery-model-view" class="gallery-view" role="tabpanel" aria-labelledby="gallery-model-tab">
+                <div class="gallery-section-heading">
+                  <span id="gallery-models-title" class="eyebrow">CHARACTER</span>
+                  <span class="gallery-count" aria-hidden="true">18</span>
+                </div>
+                <img id="gallery-characters-art" class="gallery-section-art" src="assets/illustrations/gallery-characters.png" alt="Orbiting character wardrobe" draggable="false">
+                <div id="gallery-model-list" class="gallery-card-grid gallery-model-grid"></div>
               </div>
-              <img id="gallery-scenes-art" class="gallery-section-art" src="assets/illustrations/gallery-scenes.png" alt="Cosmic scenery index" draggable="false">
-              <div id="gallery-scene-list" class="gallery-card-grid gallery-scene-grid"></div>
+              <div id="gallery-scene-view" class="gallery-view" role="tabpanel" aria-labelledby="gallery-scene-tab" hidden>
+                <div class="gallery-section-heading">
+                  <span id="gallery-scenes-title" class="eyebrow">SCENERY</span>
+                  <span class="gallery-count" aria-hidden="true">18</span>
+                </div>
+                <img id="gallery-scenes-art" class="gallery-section-art" src="assets/illustrations/gallery-scenes.png" alt="Cosmic scenery index" draggable="false">
+                <div id="gallery-scene-list" class="gallery-card-grid gallery-scene-grid"></div>
+              </div>
             </section>
 
             <button id="leaderboard-backdrop" class="leaderboard-backdrop" type="button" aria-label="Close leaderboard"></button>

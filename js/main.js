@@ -611,6 +611,8 @@
     document.getElementById('gallery-button').addEventListener('click', () => UI.openGallery());
     document.getElementById('gallery-close').addEventListener('click', () => UI.closeGallery());
     document.getElementById('gallery-backdrop').addEventListener('click', () => UI.closeGallery());
+    document.getElementById('gallery-model-tab').addEventListener('click', () => UI.setGallerySection('models'));
+    document.getElementById('gallery-scene-tab').addEventListener('click', () => UI.setGallerySection('scenes'));
     document.getElementById('gallery-model-list').addEventListener('click', (event) => {
       const button = event.target.closest('button[data-gallery-model]');
       if (button) selectModel(button.dataset.galleryModel);
