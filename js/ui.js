@@ -23,8 +23,8 @@
         'upgrade-cost', 'background-kicker', 'background-label', 'background-hint',
         'background-prev', 'background-next', 'model-kicker', 'model-label', 'model-hint',
         'model-prev', 'model-next', 'save-status', 'shop-button', 'shop-sheet', 'shop-backdrop',
-        'shop-close', 'shop-list', 'shop-title', 'shop-summary', 'achievements-title',
-        'achievement-count', 'achievement-list', 'event-star',
+        'shop-close', 'shop-list', 'shop-title', 'shop-summary', 'shop-art', 'achievements-title',
+        'achievement-count', 'achievement-list', 'achievement-art', 'event-star',
         'leaderboard-button', 'leaderboard-sheet', 'leaderboard-backdrop', 'leaderboard-close',
         'leaderboard-title', 'leaderboard-summary', 'leaderboard-list', 'leaderboard-status'
       ];
@@ -67,6 +67,8 @@
       refs.shopButton.textContent = translate('shop');
       refs.leaderboardButton.textContent = translate('leaderboard');
       refs.shopTitle.textContent = translate('shopTitle');
+      refs.shopArt.alt = translate('shopArtAlt');
+      refs.achievementArt.alt = translate('achievementsArtAlt');
       refs.leaderboardTitle.textContent = translate('leaderboardTitle');
       refs.shopClose.setAttribute('aria-label', translate('close'));
       refs.leaderboardClose.setAttribute('aria-label', translate('close'));
@@ -93,7 +95,8 @@
     }
 
     async function preloadModels(onProgress) {
-      const sources = [...CONFIG.MODELS, CONFIG.ICON];
+      const illustrationSources = Object.values(CONFIG.ILLUSTRATIONS || {});
+      const sources = [...CONFIG.MODELS, CONFIG.ICON, ...illustrationSources];
       let completed = 0;
 
       const tasks = sources.map((source, index) => new Promise((resolve, reject) => {
@@ -130,19 +133,22 @@
     function renderBackground(index) {
       const scene = CONFIG.SCENES?.[index] || CONFIG.SCENES?.[0];
       const gradient = scene?.gradient || CONFIG.GRADIENTS[index] || CONFIG.GRADIENTS[0];
+      const background = scene?.art
+        ? `${scene.artOverlay || 'linear-gradient(155deg, rgba(20, 18, 54, 0.58), rgba(6, 8, 24, 0.82))'}, url("${scene.art}")`
+        : gradient;
       refs.gameStage.dataset.tone = scene?.tone || CONFIG.BACKGROUND_TONES[index] || 'light';
       if (appliedBackground < 0) {
-        refs.gradientCurrent.style.background = gradient;
+        refs.gradientCurrent.style.background = background;
         appliedBackground = index;
         return;
       }
       if (appliedBackground === index) return;
 
       window.clearTimeout(backgroundTimer);
-      refs.gradientNext.style.background = gradient;
+      refs.gradientNext.style.background = background;
       refs.gradientNext.classList.add('is-visible');
       backgroundTimer = window.setTimeout(() => {
-        refs.gradientCurrent.style.background = gradient;
+        refs.gradientCurrent.style.background = background;
         refs.gradientNext.classList.remove('is-visible');
         appliedBackground = index;
       }, 660);

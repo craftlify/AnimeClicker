@@ -5,6 +5,14 @@ window.CONFIG = {
   STAGE_HEIGHT: 960,
   MAX_LEVEL: 15,
   ICON: 'assets/icon.png',
+  ILLUSTRATIONS: {
+    sceneAurora: 'assets/illustrations/scene-aurora.png',
+    sceneNebula: 'assets/illustrations/scene-nebula.png',
+    sceneEclipse: 'assets/illustrations/scene-eclipse.png',
+    shopBanner: 'assets/illustrations/premium-shop-banner.png',
+    starlightEvent: 'assets/illustrations/starlight-event.png',
+    achievementConstellation: 'assets/illustrations/achievement-constellation.png'
+  },
 
   // Cumulative TOTAL EARNED points needed to reach each level (index 0 = level 1).
   LEVELS: [0, 100, 260, 520, 930, 1580, 2630, 4310, 6990, 11290, 18160, 29150, 46750, 74890, 119930],
@@ -15,15 +23,21 @@ window.CONFIG = {
     COSTS: [50, 150, 400, 900, 1800, 3300, 5600, 9000, 13800, 20500, 29500, 41500]
   },
 
-  // Level at which each model (girl) unlocks.
-  MODEL_UNLOCKS: [1, 3, 5, 8, 11, 15],
+  // Level at which each model unlocks. The first six values are save-compatible legacy unlocks.
+  MODEL_UNLOCKS: [1, 3, 5, 8, 11, 15, 8, 9, 10, 12, 14, 15],
   MODELS: [
     'assets/models/girl1.png',
     'assets/models/girl2.png',
     'assets/models/girl3.png',
     'assets/models/girl4.png',
     'assets/models/girl5.png',
-    'assets/models/girl6.png'
+    'assets/models/girl6.png',
+    'assets/models/premium-velvet.png',
+    'assets/models/premium-aurelia.png',
+    'assets/models/premium-marina.png',
+    'assets/models/premium-jade.png',
+    'assets/models/premium-vesper.png',
+    'assets/models/premium-nocturne.png'
   ],
   SHOP_ITEMS: [
     {
@@ -81,8 +95,8 @@ window.CONFIG = {
   },
 
   MODEL_NAMES: {
-    en: ['Petal', 'Sunbeam', 'Tide', 'Verdant', 'Prism', 'Starlight'],
-    ru: ['Лепесток', 'Солнышко', 'Прилив', 'Вердант', 'Призма', 'Звезда']
+    en: ['Petal', 'Sunbeam', 'Tide', 'Verdant', 'Prism', 'Starlight', 'Velvet', 'Aurelia', 'Marina', 'Jade', 'Vesper', 'Nocturne'],
+    ru: ['Лепесток', 'Солнышко', 'Прилив', 'Вердант', 'Призма', 'Звезда', 'Вельвет', 'Аурелия', 'Марина', 'Джейд', 'Веспер', 'Ноктюрн']
   },
 
   // One scene per level, auto-applied on level-up; players can cycle unlocked ones.
@@ -99,9 +113,9 @@ window.CONFIG = {
     { tone: 'dark', gradient: 'linear-gradient(155deg, #5c2c68 0%, #2f1e4c 45%, #17152f 100%)' }, // 10 neon pink
     { tone: 'dark', gradient: 'linear-gradient(155deg, #284d78 0%, #213353 42%, #141c38 100%)' }, // 11 neon mix
     { tone: 'dark', gradient: 'linear-gradient(155deg, #54396e 0%, #302653 47%, #18152f 100%)' }, // 12 dusk
-    { tone: 'dark', gradient: 'linear-gradient(155deg, #352a68 0%, #1e1b47 48%, #0e102a 100%)' }, // 13 deep violet
-    { tone: 'dark', gradient: 'linear-gradient(155deg, #2c2b66 0%, #171838 46%, #0b0c22 100%)' }, // 14 night
-    { tone: 'dark', gradient: 'linear-gradient(155deg, #302553 0%, #141733 45%, #070914 100%)' } // 15 galaxy
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #352a68 0%, #1e1b47 48%, #0e102a 100%)', art: 'assets/illustrations/scene-aurora.png', artOverlay: 'linear-gradient(155deg, rgba(30, 22, 70, 0.52) 0%, rgba(13, 14, 43, 0.78) 100%)' }, // 13 deep violet
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #2c2b66 0%, #171838 46%, #0b0c22 100%)', art: 'assets/illustrations/scene-nebula.png', artOverlay: 'linear-gradient(155deg, rgba(38, 22, 74, 0.58) 0%, rgba(10, 9, 31, 0.82) 100%)' }, // 14 night
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #302553 0%, #141733 45%, #070914 100%)', art: 'assets/illustrations/scene-eclipse.png', artOverlay: 'linear-gradient(155deg, rgba(29, 20, 53, 0.58) 0%, rgba(5, 7, 20, 0.84) 100%)' } // 15 galaxy
   ],
 
   STRINGS: {
@@ -143,6 +157,8 @@ window.CONFIG = {
       modelAlt: '{a}, click character',
       shop: 'SHOP',
       shopTitle: 'Starlight Shop',
+      shopArtAlt: 'Premium cosmic fashion collection',
+      achievementsArtAlt: 'Constellation of unlocked achievements',
       shopSummary: '{a} / {b} achievements unlocked',
       close: 'Close',
       shopLocked: 'Unlocks at level {a}',
@@ -233,6 +249,8 @@ window.CONFIG = {
       modelAlt: '{a}, персонаж для клика',
       shop: 'МАГАЗИН',
       shopTitle: 'Магазин звёздного света',
+      shopArtAlt: 'Премиальная космическая коллекция образов',
+      achievementsArtAlt: 'Созвездие открытых достижений',
       shopSummary: '{a} / {b} достижений открыто',
       close: 'Закрыть',
       shopLocked: 'Откроется на уровне {a}',

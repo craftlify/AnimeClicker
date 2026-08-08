@@ -29,7 +29,7 @@ def image_paths(inputs: Iterable[Path]) -> list[Path]:
     paths: list[Path] = []
     for item in inputs:
         if item.is_dir():
-            paths.extend(sorted(item.glob("girl*.png")))
+            paths.extend(sorted(item.glob("*.png")))
         elif item.is_file():
             paths.append(item)
         else:
@@ -84,7 +84,7 @@ def main() -> int:
 
     paths = image_paths(args.inputs or [MODELS])
     if not paths:
-        parser.error("no girl*.png files found")
+        parser.error("no character PNG files found")
 
     for source in paths:
         image = Image.open(source)
