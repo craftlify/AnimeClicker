@@ -6,9 +6,6 @@ window.CONFIG = {
   MAX_LEVEL: 15,
   ICON: 'assets/icon.png',
   ILLUSTRATIONS: {
-    sceneAurora: 'assets/illustrations/scene-aurora.png',
-    sceneNebula: 'assets/illustrations/scene-nebula.png',
-    sceneEclipse: 'assets/illustrations/scene-eclipse.png',
     shopBanner: 'assets/illustrations/premium-shop-banner.png',
     starlightEvent: 'assets/illustrations/starlight-event.png',
     achievementConstellation: 'assets/illustrations/achievement-constellation.png',
@@ -28,6 +25,11 @@ window.CONFIG = {
 
   // Level at which each model unlocks. The first six values are save-compatible legacy unlocks.
   MODEL_UNLOCKS: [1, 3, 5, 8, 11, 15, 8, 9, 10, 12, 14, 15, 8, 9, 10, 12, 14, 15],
+  // Background unlocks stay index-based for save compatibility, while allowing
+  // premium scenes to become available alongside their recommended characters.
+  BACKGROUND_UNLOCKS: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 8, 9, 10],
+  // A permutation: every character owns one unique recommended scene.
+  MODEL_BACKGROUND_DEFAULTS: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 15, 16, 17, 11, 12, 14],
   MODELS: [
     'assets/models/girl1.png',
     'assets/models/girl2.png',
@@ -109,27 +111,30 @@ window.CONFIG = {
   },
 
   SCENE_NAMES: {
-    en: ['Pink dawn', 'Peach orbit', 'Sunset relay', 'Sky harbor', 'Tideglass', 'Meadow signal', 'Verdant drift', 'Lavender gate', 'Violet passage', 'Rose night', 'Blue convergence', 'Dusk archive', 'Aurora observatory', 'Nebula terrace', 'Eclipse horizon'],
-    ru: ['Розовый рассвет', 'Персиковая орбита', 'Закатный маяк', 'Небесная гавань', 'Приливное стекло', 'Сигнал луга', 'Зелёный дрейф', 'Лавандовые врата', 'Фиолетовый проход', 'Розовая ночь', 'Синее схождение', 'Сумеречный архив', 'Обсерватория сияния', 'Терраса туманности', 'Горизонт затмения']
+    en: ['Rose bloom', 'Solar peach', 'Azure tide', 'Verdant sky', 'Prism shore', 'Starlight dome', 'Velvet atrium', 'Aurelia terrace', 'Marina harbor', 'Jade garden', 'Vesper passage', 'Iris archive', 'Onyx eclipse', 'Nocturne observatory', 'Celeste horizon', 'Lyra signal', 'Sable dusk', 'Coral sanctuary'],
+    ru: ['Розовый цветок', 'Солнечный персик', 'Лазурный прилив', 'Зелёное небо', 'Призматический берег', 'Купол звёздного света', 'Бархатный атриум', 'Терраса Аурелии', 'Гавань Марины', 'Сад Джейд', 'Проход Веспер', 'Архив Ирис', 'Затмение Оникса', 'Обсерватория Ноктюрна', 'Горизонт Селесты', 'Сигнал Лиры', 'Сумерки Сейбл', 'Святилище Корал']
   },
 
-  // One scene per level, auto-applied on level-up; players can cycle unlocked ones.
+  // Scene indices and the first 15 unlock milestones are intentionally stable.
   SCENES: [
-    { tone: 'light', gradient: 'linear-gradient(155deg, #fff6f8 0%, #ffd7e4 48%, #f5b0c8 100%)' }, // 1 pastel pink
-    { tone: 'light', gradient: 'linear-gradient(155deg, #fff7e9 0%, #ffdbaf 48%, #f5bd91 100%)' }, // 2 peach
-    { tone: 'light', gradient: 'linear-gradient(155deg, #fff1d8 0%, #ffd391 45%, #efaa9d 100%)' }, // 3 sunset
-    { tone: 'light', gradient: 'linear-gradient(155deg, #effaff 0%, #c9eaf5 48%, #a6cae6 100%)' }, // 4 sky
-    { tone: 'light', gradient: 'linear-gradient(155deg, #e8fbfb 0%, #b7e7e7 46%, #84c9df 100%)' }, // 5 ocean
-    { tone: 'light', gradient: 'linear-gradient(155deg, #effbdc 0%, #cee9b0 44%, #a8d3a8 100%)' }, // 6 meadow
-    { tone: 'light', gradient: 'linear-gradient(155deg, #e4f8e5 0%, #b4dfbb 46%, #83bfae 100%)' }, // 7 forest
-    { tone: 'light', gradient: 'linear-gradient(155deg, #f1eafd 0%, #d7c7ef 48%, #b7a1dc 100%)' }, // 8 lavender
-    { tone: 'dark', gradient: 'linear-gradient(155deg, #514277 0%, #2f2856 46%, #18183a 100%)' }, // 9 violet
-    { tone: 'dark', gradient: 'linear-gradient(155deg, #5c2c68 0%, #2f1e4c 45%, #17152f 100%)' }, // 10 neon pink
-    { tone: 'dark', gradient: 'linear-gradient(155deg, #284d78 0%, #213353 42%, #141c38 100%)' }, // 11 neon mix
-    { tone: 'dark', gradient: 'linear-gradient(155deg, #54396e 0%, #302653 47%, #18152f 100%)' }, // 12 dusk
-    { tone: 'dark', gradient: 'linear-gradient(155deg, #352a68 0%, #1e1b47 48%, #0e102a 100%)', art: 'assets/illustrations/scene-aurora.png', artOverlay: 'linear-gradient(155deg, rgba(30, 22, 70, 0.52) 0%, rgba(13, 14, 43, 0.78) 100%)' }, // 13 deep violet
-    { tone: 'dark', gradient: 'linear-gradient(155deg, #2c2b66 0%, #171838 46%, #0b0c22 100%)', art: 'assets/illustrations/scene-nebula.png', artOverlay: 'linear-gradient(155deg, rgba(38, 22, 74, 0.58) 0%, rgba(10, 9, 31, 0.82) 100%)' }, // 14 night
-    { tone: 'dark', gradient: 'linear-gradient(155deg, #302553 0%, #141733 45%, #070914 100%)', art: 'assets/illustrations/scene-eclipse.png', artOverlay: 'linear-gradient(155deg, rgba(29, 20, 53, 0.58) 0%, rgba(5, 7, 20, 0.84) 100%)' } // 15 galaxy
+    { tone: 'light', gradient: 'linear-gradient(155deg, #fff6f8 0%, #ffd7e4 48%, #f5b0c8 100%)', art: 'assets/illustrations/scenes/scene-petal.webp', artOverlay: 'linear-gradient(155deg, rgba(255, 246, 248, 0.2), rgba(146, 55, 101, 0.24))' },
+    { tone: 'light', gradient: 'linear-gradient(155deg, #fff7e9 0%, #ffdbaf 48%, #f5bd91 100%)', art: 'assets/illustrations/scenes/scene-sunbeam.webp', artOverlay: 'linear-gradient(155deg, rgba(255, 247, 233, 0.14), rgba(157, 91, 22, 0.2))' },
+    { tone: 'light', gradient: 'linear-gradient(155deg, #fff1d8 0%, #ffd391 45%, #efaa9d 100%)', art: 'assets/illustrations/scenes/scene-tide.webp', artOverlay: 'linear-gradient(155deg, rgba(255, 241, 216, 0.18), rgba(15, 91, 139, 0.22))' },
+    { tone: 'light', gradient: 'linear-gradient(155deg, #effaff 0%, #c9eaf5 48%, #a6cae6 100%)', art: 'assets/illustrations/scenes/scene-verdant.webp', artOverlay: 'linear-gradient(155deg, rgba(239, 250, 255, 0.16), rgba(28, 93, 70, 0.22))' },
+    { tone: 'light', gradient: 'linear-gradient(155deg, #e8fbfb 0%, #b7e7e7 46%, #84c9df 100%)', art: 'assets/illustrations/scenes/scene-prism.webp', artOverlay: 'linear-gradient(155deg, rgba(232, 251, 251, 0.14), rgba(91, 49, 125, 0.24))' },
+    { tone: 'light', gradient: 'linear-gradient(155deg, #effbdc 0%, #cee9b0 44%, #a8d3a8 100%)', art: 'assets/illustrations/scenes/scene-starlight.webp', artOverlay: 'linear-gradient(155deg, rgba(239, 251, 220, 0.16), rgba(44, 52, 116, 0.24))' },
+    { tone: 'light', gradient: 'linear-gradient(155deg, #e4f8e5 0%, #b4dfbb 46%, #83bfae 100%)', art: 'assets/illustrations/scenes/scene-velvet.webp', artOverlay: 'linear-gradient(155deg, rgba(228, 248, 229, 0.14), rgba(123, 35, 84, 0.25))' },
+    { tone: 'light', gradient: 'linear-gradient(155deg, #f1eafd 0%, #d7c7ef 48%, #b7a1dc 100%)', art: 'assets/illustrations/scenes/scene-aurelia.webp', artOverlay: 'linear-gradient(155deg, rgba(241, 234, 253, 0.16), rgba(139, 84, 18, 0.2))' },
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #514277 0%, #2f2856 46%, #18183a 100%)', art: 'assets/illustrations/scenes/scene-marina.webp', artOverlay: 'linear-gradient(155deg, rgba(35, 104, 154, 0.24), rgba(7, 20, 45, 0.62))' },
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #5c2c68 0%, #2f1e4c 45%, #17152f 100%)', art: 'assets/illustrations/scenes/scene-jade.webp', artOverlay: 'linear-gradient(155deg, rgba(27, 107, 73, 0.28), rgba(8, 25, 28, 0.64))' },
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #284d78 0%, #213353 42%, #141c38 100%)', art: 'assets/illustrations/scenes/scene-vesper.webp', artOverlay: 'linear-gradient(155deg, rgba(78, 43, 122, 0.25), rgba(11, 12, 34, 0.66))' },
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #54396e 0%, #302653 47%, #18152f 100%)', art: 'assets/illustrations/scenes/scene-iris.webp', artOverlay: 'linear-gradient(155deg, rgba(105, 64, 141, 0.28), rgba(10, 11, 31, 0.68))' },
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #352a68 0%, #1e1b47 48%, #0e102a 100%)', art: 'assets/illustrations/scenes/scene-onyx.webp', artOverlay: 'linear-gradient(155deg, rgba(19, 40, 88, 0.24), rgba(3, 5, 17, 0.72))' },
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #2c2b66 0%, #171838 46%, #0b0c22 100%)', art: 'assets/illustrations/scenes/scene-celeste.webp', artOverlay: 'linear-gradient(155deg, rgba(24, 58, 108, 0.24), rgba(6, 8, 24, 0.66))' },
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #302553 0%, #141733 45%, #070914 100%)', art: 'assets/illustrations/scenes/scene-nocturne.webp', artOverlay: 'linear-gradient(155deg, rgba(10, 26, 65, 0.24), rgba(2, 4, 12, 0.74))' },
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #432c66 0%, #21183f 45%, #0b0a1c 100%)', art: 'assets/illustrations/scenes/scene-lyra.webp', artOverlay: 'linear-gradient(155deg, rgba(100, 48, 113, 0.24), rgba(9, 7, 26, 0.7))' },
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #39476a 0%, #222b4b 46%, #101428 100%)', art: 'assets/illustrations/scenes/scene-sable.webp', artOverlay: 'linear-gradient(155deg, rgba(42, 76, 130, 0.24), rgba(7, 10, 23, 0.7))' },
+    { tone: 'dark', gradient: 'linear-gradient(155deg, #5c3c68 0%, #263c5b 47%, #0b1728 100%)', art: 'assets/illustrations/scenes/scene-coral.webp', artOverlay: 'linear-gradient(155deg, rgba(36, 135, 158, 0.26), rgba(13, 10, 33, 0.66))' }
   ],
 
   STRINGS: {
@@ -185,6 +190,11 @@ window.CONFIG = {
       galleryLocked: 'Unlocks at level {a}',
       galleryCurrent: 'CURRENT',
       galleryAvailable: 'SELECT',
+      galleryRecommended: 'RECOMMENDED',
+      recommendedBackground: 'Recommended: {a}',
+      useRecommended: 'USE RECOMMENDED',
+      recommendedActive: 'RECOMMENDED SCENE',
+      newScene: 'New scene unlocked',
       shopSummary: '{a} / {b} achievements unlocked',
       close: 'Close',
       shopLocked: 'Unlocks at level {a}',
@@ -289,6 +299,11 @@ window.CONFIG = {
       galleryLocked: 'Откроется на уровне {a}',
       galleryCurrent: 'ТЕКУЩЕЕ',
       galleryAvailable: 'ВЫБРАТЬ',
+      galleryRecommended: 'РЕКОМЕНДУЕТСЯ',
+      recommendedBackground: 'Рекомендованный фон: {a}',
+      useRecommended: 'ВЕРНУТЬ РЕКОМЕНДОВАННЫЙ',
+      recommendedActive: 'РЕКОМЕНДОВАННАЯ СЦЕНА',
+      newScene: 'Новая сцена открыта',
       shopSummary: '{a} / {b} достижений открыто',
       close: 'Закрыть',
       shopLocked: 'Откроется на уровне {a}',

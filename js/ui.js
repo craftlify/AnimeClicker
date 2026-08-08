@@ -22,7 +22,7 @@
         'retry-button', 'upgrade-kicker',
         'power-value', 'per-click', 'upgrade-status', 'upgrade-button', 'upgrade-label',
         'upgrade-cost', 'background-kicker', 'background-label', 'background-hint',
-        'background-prev', 'background-next', 'model-kicker', 'model-label', 'model-hint',
+        'background-prev', 'background-next', 'background-recommended', 'model-kicker', 'model-label', 'model-hint',
         'model-prev', 'model-next', 'save-status', 'shop-button', 'shop-sheet', 'shop-backdrop',
         'shop-close', 'shop-list', 'shop-title', 'shop-summary', 'shop-art', 'achievements-title',
         'achievement-count', 'achievement-list', 'achievement-art', 'event-star',
@@ -75,6 +75,8 @@
       refs.upgradeKicker.textContent = translate('upgradeKicker');
       refs.backgroundKicker.textContent = translate('backgroundKicker');
       refs.backgroundHint.textContent = translate('backgroundHint');
+      refs.backgroundRecommended.textContent = translate('useRecommended');
+      refs.backgroundRecommended.setAttribute('aria-label', translate('useRecommended'));
       refs.modelKicker.textContent = translate('modelKicker');
       refs.modelHint.textContent = translate('modelHint');
       refs.clickHint.textContent = translate('clickHint');
@@ -121,8 +123,11 @@
     }
 
     async function preloadModels(onProgress) {
-      const illustrationSources = Object.values(CONFIG.ILLUSTRATIONS || {});
-      const sources = [...CONFIG.MODELS, CONFIG.ICON, ...illustrationSources];
+      const illustrationSources = [
+        ...Object.values(CONFIG.ILLUSTRATIONS || {}),
+        ...(CONFIG.SCENES || []).map((scene) => scene.art).filter(Boolean)
+      ];
+      const sources = [...new Set([...CONFIG.MODELS, CONFIG.ICON, ...illustrationSources])];
       let completed = 0;
 
       const tasks = sources.map((source, index) => new Promise((resolve, reject) => {
@@ -270,7 +275,11 @@
         name.className = 'gallery-card-name';
         const status = document.createElement('span');
         status.className = 'gallery-card-status';
-        content.append(name, status);
+        const badge = document.createElement('span');
+        badge.className = 'gallery-card-badge';
+        badge.dataset.galleryRecommended = 'true';
+        badge.hidden = true;
+        content.append(name, badge, status);
         card.appendChild(content);
         refs.gallerySceneList.appendChild(card);
       });
@@ -350,18 +359,26 @@
 
       refs.gallerySceneList.querySelectorAll('[data-gallery-scene]').forEach((card) => {
         const index = Number(card.dataset.galleryScene);
-        const unlocked = index < details.unlockedBackgroundCount;
+        const unlocked = details.unlockedBackgrounds.includes(index);
         const current = state.bgIdx === index;
+        const recommended = details.recommendedBackground === index;
+        const sceneStatus = current
+          ? translate('galleryCurrent')
+          : translate('galleryAvailable');
         card.disabled = !unlocked;
         card.classList.toggle('is-locked', !unlocked);
         card.classList.toggle('is-current', current);
-        card.setAttribute('aria-label', `${sceneName(index)}: ${unlocked ? (current ? translate('galleryCurrent') : translate('galleryAvailable')) : translate('galleryLocked', { a: index + 1 })}`);
+        card.classList.toggle('is-recommended', recommended);
+        card.setAttribute('aria-label', `${sceneName(index)}: ${unlocked
+          ? `${sceneStatus}${recommended ? `, ${translate('galleryRecommended')}` : ''}`
+          : translate('galleryLocked', { a: CONFIG.BACKGROUND_UNLOCKS[index] })}`);
         card.querySelector('.gallery-card-name').textContent = sceneName(index);
-        card.querySelector('.gallery-card-status').textContent = current
-          ? translate('galleryCurrent')
-          : unlocked
-            ? translate('galleryAvailable')
-            : translate('galleryLocked', { a: index + 1 });
+        const badge = card.querySelector('[data-gallery-recommended]');
+        badge.hidden = !recommended;
+        badge.textContent = recommended ? translate('galleryRecommended') : '';
+        card.querySelector('.gallery-card-status').textContent = unlocked
+          ? sceneStatus
+          : translate('galleryLocked', { a: CONFIG.BACKGROUND_UNLOCKS[index] });
       });
     }
 
@@ -404,13 +421,18 @@
         : translate('cost', { a: formatNumber(nextCost) });
 
       refs.backgroundLabel.textContent = translate('background', {
-        a: state.bgIdx + 1,
+        a: details.backgroundPosition,
         b: details.unlockedBackgroundCount
       });
+      refs.backgroundHint.textContent = details.backgroundIsRecommended
+        ? translate('recommendedActive')
+        : translate('recommendedBackground', { a: sceneName(details.recommendedBackground) });
       refs.backgroundPrev.disabled = details.unlockedBackgroundCount <= 1;
       refs.backgroundNext.disabled = details.unlockedBackgroundCount <= 1;
       refs.backgroundPrev.setAttribute('aria-label', translate('previous'));
       refs.backgroundNext.setAttribute('aria-label', translate('next'));
+      refs.backgroundRecommended.disabled = details.backgroundIsRecommended;
+      refs.backgroundRecommended.setAttribute('aria-label', translate('useRecommended'));
 
       refs.modelLabel.textContent = translate('model', {
         a: modelName,

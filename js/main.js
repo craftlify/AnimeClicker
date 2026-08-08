@@ -65,6 +65,28 @@
     return indices.length ? indices : [0];
   }
 
+  function unlockedBackgroundsFor(level) {
+    const unlocks = CONFIG.BACKGROUND_UNLOCKS || CONFIG.SCENES.map((_, index) => index + 1);
+    const sceneCount = Math.min(CONFIG.SCENES.length, unlocks.length);
+    const indices = [];
+    for (let index = 0; index < sceneCount; index += 1) {
+      if (level >= unlocks[index]) indices.push(index);
+    }
+    return indices.length ? indices : [0];
+  }
+
+  function recommendedBackgroundFor(modelIdx) {
+    const candidate = CONFIG.MODEL_BACKGROUND_DEFAULTS?.[modelIdx];
+    return Number.isInteger(candidate) && candidate >= 0 && candidate < CONFIG.SCENES.length
+      ? candidate
+      : 0;
+  }
+
+  function nonNegativeIndex(value) {
+    const candidate = Number(value);
+    return Number.isInteger(candidate) && candidate >= 0 ? candidate : -1;
+  }
+
   function sanitizeState(raw) {
     const source = raw && typeof raw === 'object' ? raw : DEFAULT_STATE;
     const totalEarned = integer(source.totalEarned);
@@ -74,7 +96,8 @@
     const points = Math.min(integer(source.points), totalEarned);
     const unlockedModels = unlockedModelsFor(level);
     const candidateModel = Math.min(integer(source.modelIdx), CONFIG.MODELS.length - 1);
-    const candidateBackground = Math.min(integer(source.bgIdx), level - 1);
+    const unlockedBackgrounds = unlockedBackgroundsFor(level);
+    const candidateBackground = integer(source.bgIdx);
     const shopItems = CONFIG.SHOP_ITEMS || [];
     const autoItem = shopItems.find((item) => item.id === 'autoClickers');
     const focusItem = shopItems.find((item) => item.id === 'focusLevel');
@@ -89,7 +112,9 @@
       points,
       clickLevel,
       modelIdx: unlockedModels.includes(candidateModel) ? candidateModel : unlockedModels[unlockedModels.length - 1],
-      bgIdx: Math.max(0, candidateBackground),
+      bgIdx: unlockedBackgrounds.includes(candidateBackground)
+        ? candidateBackground
+        : unlockedBackgrounds[unlockedBackgrounds.length - 1],
       autoClickers: Math.min(integer(source.autoClickers), autoItem?.max ?? 25),
       focusLevel: Math.min(integer(source.focusLevel), focusItem?.max ?? 5),
       lensLevel: Math.min(integer(source.lensLevel), lensItem?.max ?? 4),
@@ -116,6 +141,9 @@
     const comboBonus = Math.floor(combo / CONFIG.COMBO_STEP);
     const manualPower = basePower + currentState.focusLevel;
     const power = manualPower + comboBonus;
+    const unlockedBackgrounds = unlockedBackgroundsFor(level);
+    const recommendedBackground = recommendedBackgroundFor(currentState.modelIdx);
+    const backgroundPosition = Math.max(0, unlockedBackgrounds.indexOf(currentState.bgIdx)) + 1;
 
     return {
       level,
@@ -131,7 +159,11 @@
       shopUnlocked: level >= 3,
       achievementCount: currentState.achievements.length,
       eventActive,
-      unlockedBackgroundCount: level,
+      unlockedBackgrounds,
+      unlockedBackgroundCount: unlockedBackgrounds.length,
+      backgroundPosition,
+      recommendedBackground,
+      backgroundIsRecommended: currentState.bgIdx === recommendedBackground,
       unlockedModelCount: unlockedModels.length,
       unlockedModels,
       maxClickLevel
@@ -310,6 +342,7 @@
 
     const previousLevelIndex = levelIndexFor(state.totalEarned);
     const previousModelCount = unlockedModelsFor(previousLevelIndex + 1).length;
+    const previousBackgroundCount = unlockedBackgroundsFor(previousLevelIndex + 1).length;
     state.points += value;
     state.totalEarned += value;
     const nextLevelIndex = levelIndexFor(state.totalEarned);
@@ -323,9 +356,11 @@
     }
 
     if (nextLevelIndex > previousLevelIndex) {
-      // Reaching a level always previews that level's new scenery.
-      state.bgIdx = nextLevelIndex;
       UI.showToast('newLevel', { a: nextLevel });
+      const nextBackgroundCount = unlockedBackgroundsFor(nextLevel).length;
+      if (nextBackgroundCount > previousBackgroundCount) {
+        window.setTimeout(() => UI.showToast('newScene', undefined, 1500), 420);
+      }
       const nextModelCount = unlockedModelsFor(nextLevel).length;
       if (nextModelCount > previousModelCount) {
         window.setTimeout(() => UI.showToast('newModel', undefined, 1700), 750);
@@ -500,27 +535,37 @@
   }
 
   function cycleBackground(direction) {
-    const count = detailsFor().unlockedBackgroundCount;
-    if (count <= 1) return;
-    state.bgIdx = (state.bgIdx + direction + count) % count;
+    const backgrounds = detailsFor().unlockedBackgrounds;
+    if (backgrounds.length <= 1) return;
+    const currentPosition = Math.max(0, backgrounds.indexOf(state.bgIdx));
+    state.bgIdx = backgrounds[(currentPosition + direction + backgrounds.length) % backgrounds.length];
     UI.render(state, detailsFor());
     requestSave();
+  }
+
+  function applyModelSelection(modelIdx) {
+    state.modelIdx = modelIdx;
+    const recommended = recommendedBackgroundFor(modelIdx);
+    const unlockedBackgrounds = detailsFor(state).unlockedBackgrounds;
+    if (unlockedBackgrounds.includes(recommended)) {
+      state.bgIdx = recommended;
+    }
   }
 
   function cycleModel(direction) {
     const models = detailsFor().unlockedModels;
     if (models.length <= 1) return;
     const currentPosition = Math.max(0, models.indexOf(state.modelIdx));
-    state.modelIdx = models[(currentPosition + direction + models.length) % models.length];
+    applyModelSelection(models[(currentPosition + direction + models.length) % models.length]);
     hitMap = null;
     UI.render(state, detailsFor());
     requestSave();
   }
 
   function selectBackground(index) {
-    const candidate = integer(index, -1);
+    const candidate = nonNegativeIndex(index);
     const details = detailsFor();
-    if (candidate < 0 || candidate >= details.unlockedBackgroundCount) return;
+    if (!details.unlockedBackgrounds.includes(candidate)) return;
     state.bgIdx = candidate;
     UI.render(state, detailsFor());
     UI.closeGallery();
@@ -528,13 +573,21 @@
   }
 
   function selectModel(index) {
-    const candidate = integer(index, -1);
+    const candidate = nonNegativeIndex(index);
     const details = detailsFor();
     if (!details.unlockedModels.includes(candidate)) return;
-    state.modelIdx = candidate;
+    applyModelSelection(candidate);
     hitMap = null;
     UI.render(state, detailsFor());
     UI.closeGallery();
+    requestSave();
+  }
+
+  function useRecommendedBackground() {
+    const recommended = recommendedBackgroundFor(state.modelIdx);
+    if (!detailsFor().unlockedBackgrounds.includes(recommended)) return;
+    state.bgIdx = recommended;
+    UI.render(state, detailsFor());
     requestSave();
   }
 
@@ -547,6 +600,7 @@
     document.getElementById('upgrade-button').addEventListener('click', buyUpgrade);
     document.getElementById('background-prev').addEventListener('click', () => cycleBackground(-1));
     document.getElementById('background-next').addEventListener('click', () => cycleBackground(1));
+    document.getElementById('background-recommended').addEventListener('click', useRecommendedBackground);
     document.getElementById('model-prev').addEventListener('click', () => cycleModel(-1));
     document.getElementById('model-next').addEventListener('click', () => cycleModel(1));
     document.getElementById('language-toggle').addEventListener('click', () => {
