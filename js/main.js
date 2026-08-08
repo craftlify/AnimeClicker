@@ -114,7 +114,8 @@
     const maxClickLevel = CONFIG.CLICK_UPGRADES.COSTS.length;
     const basePower = CONFIG.CLICK_UPGRADES.POWERS[Math.min(currentState.clickLevel, maxClickLevel)];
     const comboBonus = Math.floor(combo / CONFIG.COMBO_STEP);
-    const power = basePower + currentState.focusLevel + comboBonus;
+    const manualPower = basePower + currentState.focusLevel;
+    const power = manualPower + comboBonus;
 
     return {
       level,
@@ -122,6 +123,7 @@
       nextThreshold,
       isMaxLevel,
       basePower,
+      manualPower,
       power,
       cps: currentState.autoClickers,
       combo,
@@ -142,7 +144,9 @@
 
   function requestSave() {
     window.clearTimeout(saveTimer);
+    saveTimer = 0;
     window.clearTimeout(autoSaveTimer);
+    autoSaveTimer = 0;
     UI.setSaveStatus('saving');
     saveTimer = window.setTimeout(() => {
       saveNow();
@@ -151,7 +155,6 @@
 
   function requestAutoSave() {
     if (saveTimer || autoSaveTimer) return;
-    UI.setSaveStatus('saving');
     autoSaveTimer = window.setTimeout(() => {
       autoSaveTimer = 0;
       saveNow();
@@ -160,6 +163,7 @@
 
   function saveNow() {
     window.clearTimeout(saveTimer);
+    saveTimer = 0;
     window.clearTimeout(autoSaveTimer);
     autoSaveTimer = 0;
     const snapshot = { ...state };
@@ -419,18 +423,19 @@
     return Math.floor(min + Math.random() * (max - min + 1));
   }
 
-  function hideEvent() {
+  function hideEvent(reschedule = true) {
     window.clearTimeout(eventExpiryTimer);
     eventExpiryTimer = 0;
     eventActive = false;
     UI.setEventActive(false);
+    if (reschedule) ensureEventSchedule();
   }
 
   function claimEvent() {
     if (!eventActive || document.visibilityState === 'hidden') return;
-    hideEvent();
+    hideEvent(false);
     state.eventClicks += 1;
-    const baseReward = currentPower() * 5 + state.autoClickers * 2;
+    const baseReward = detailsFor().manualPower * 5 + state.autoClickers * 2;
     const reward = Math.floor(baseReward * (1 + state.lensLevel * 0.25));
     const point = UI.getEventPoint();
     earnPoints(reward, 'event', point);
@@ -460,7 +465,7 @@
     autoLastTick = 0;
     window.clearTimeout(eventScheduleTimer);
     eventScheduleTimer = 0;
-    hideEvent();
+    hideEvent(false);
   }
 
   function autoTick() {
@@ -594,7 +599,9 @@
         ? UI.getShopFocusableElements()
         : UI.isGalleryOpen()
           ? UI.getGalleryFocusableElements()
-          : [];
+          : UI.isLeaderboardOpen()
+            ? UI.getLeaderboardFocusableElements()
+            : [];
       if (!focusable.length) return;
       const currentIndex = focusable.indexOf(document.activeElement);
       const nextIndex = event.shiftKey

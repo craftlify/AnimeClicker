@@ -27,7 +27,7 @@ window.CONFIG = {
   },
 
   // Level at which each model unlocks. The first six values are save-compatible legacy unlocks.
-  MODEL_UNLOCKS: [1, 3, 5, 8, 11, 15, 8, 9, 10, 12, 14, 15, 6, 7, 9, 11, 13, 15],
+  MODEL_UNLOCKS: [1, 3, 5, 8, 11, 15, 8, 9, 10, 12, 14, 15, 8, 9, 10, 12, 14, 15],
   MODELS: [
     'assets/models/girl1.png',
     'assets/models/girl2.png',

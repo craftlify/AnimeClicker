@@ -589,6 +589,11 @@
         .filter((node) => node && !node.closest('.is-hidden'));
     }
 
+    function getLeaderboardFocusableElements() {
+      return [refs.leaderboardClose]
+        .filter((node) => node && !node.closest('.is-hidden'));
+    }
+
     function setEventActive(active) {
       refs.eventStar.classList.toggle('is-visible', active);
       refs.eventStar.setAttribute('aria-hidden', active ? 'false' : 'true');
@@ -639,6 +644,7 @@
       isLeaderboardOpen: () => refs.leaderboardSheet.classList.contains('is-visible'),
       getShopFocusableElements,
       getGalleryFocusableElements,
+      getLeaderboardFocusableElements,
       setEventActive,
       setEventPosition,
       getEventPoint,
