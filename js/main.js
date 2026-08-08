@@ -167,6 +167,7 @@
     saveQueue = saveQueue
       .catch(() => undefined)
       .then(() => SDK.save(snapshot))
+      .then(() => Leaderboard.queueSync(true))
       .then(() => UI.setSaveStatus('saved'))
       .catch((error) => {
         console.warn('[Game] save failed', error);
@@ -330,6 +331,10 @@
     state = sanitizeState(state);
     evaluateAchievements();
     UI.render(state, detailsFor());
+    if (typeof Leaderboard !== 'undefined') {
+      Leaderboard.recordEarn(source, value);
+      Leaderboard.scheduleSync(source === 'auto');
+    }
     if (source === 'auto') requestAutoSave();
     else requestSave();
     ensureEventSchedule();
@@ -354,6 +359,7 @@
     comboLastAt = now;
     state.manualClicks += 1;
     state.bestCombo = Math.max(state.bestCombo, combo);
+    if (typeof Leaderboard !== 'undefined') Leaderboard.recordManualClick();
     window.clearTimeout(comboResetTimer);
     comboResetTimer = window.setTimeout(resetCombo, CONFIG.COMBO_WINDOW_MS + 40);
     const point = logicalPoint(clientX, clientY);
@@ -523,6 +529,9 @@
     });
     document.getElementById('retry-button').addEventListener('click', boot);
     document.getElementById('shop-button').addEventListener('click', () => UI.openShop());
+    document.getElementById('leaderboard-button').addEventListener('click', () => UI.openLeaderboard());
+    document.getElementById('leaderboard-close').addEventListener('click', () => UI.closeLeaderboard());
+    document.getElementById('leaderboard-backdrop').addEventListener('click', () => UI.closeLeaderboard());
     document.getElementById('shop-close').addEventListener('click', () => UI.closeShop());
     document.getElementById('shop-backdrop').addEventListener('click', () => UI.closeShop());
     document.getElementById('shop-list').addEventListener('click', (event) => {
@@ -531,12 +540,19 @@
     });
     document.getElementById('event-star').addEventListener('click', claimEvent);
     document.addEventListener('keydown', (event) => {
-      if (!UI.isShopOpen()) return;
       if (event.key === 'Escape') {
-        event.preventDefault();
-        UI.closeShop();
-        return;
+        if (UI.isLeaderboardOpen()) {
+          event.preventDefault();
+          UI.closeLeaderboard();
+          return;
+        }
+        if (UI.isShopOpen()) {
+          event.preventDefault();
+          UI.closeShop();
+          return;
+        }
       }
+      if (!UI.isShopOpen()) return;
       if (event.key !== 'Tab') return;
       const focusable = UI.getShopFocusableElements();
       if (!focusable.length) return;
@@ -579,6 +595,9 @@
       UI.setLanguage(SDK.lang);
       await UI.preloadModels((progress) => UI.setLoading(progress));
       state = sanitizeState(await SDK.load());
+      if (typeof Leaderboard !== 'undefined') {
+        await Leaderboard.init();
+      }
       UI.showGame();
       UI.render(state, detailsFor());
       UI.setSaveStatus(SDK.isCloud() ? 'saved' : 'offline');

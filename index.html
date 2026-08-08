@@ -11,6 +11,7 @@
     <script src="https://sdk.games.s3.yandex.net/sdk.js" defer></script>
     <script src="js/config.js" defer></script>
     <script src="js/sdk.js" defer></script>
+    <script src="js/leaderboard.js" defer></script>
     <script src="js/ui.js" defer></script>
     <script src="js/main.js" defer></script>
   </head>
@@ -133,6 +134,7 @@
                 <div class="footer-row">
                   <span class="footer-brand"><span aria-hidden="true">✦</span> STORY MODE</span>
                   <div class="footer-actions">
+                    <button id="leaderboard-button" class="leaderboard-button" type="button">LEADERBOARD</button>
                     <button id="shop-button" class="shop-button" type="button">SHOP</button>
                     <span id="save-status" class="save-status">Playing offline</span>
                   </div>
@@ -156,6 +158,19 @@
                 <span id="achievement-count" aria-hidden="true"></span>
               </div>
               <div id="achievement-list" class="achievement-list"></div>
+            </section>
+
+            <button id="leaderboard-backdrop" class="leaderboard-backdrop" type="button" aria-label="Close leaderboard"></button>
+            <section id="leaderboard-sheet" class="leaderboard-sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="leaderboard-title" tabindex="-1">
+              <div class="leaderboard-sheet-header">
+                <div>
+                  <span class="eyebrow">LEADERBOARD</span>
+                  <h2 id="leaderboard-title">Top collectors</h2>
+                  <p id="leaderboard-status" class="leaderboard-summary">You · unranked</p>
+                </div>
+                <button id="leaderboard-close" class="leaderboard-close" type="button" aria-label="Close">×</button>
+              </div>
+              <div id="leaderboard-list" class="leaderboard-list"></div>
             </section>
           </div>
         </div>

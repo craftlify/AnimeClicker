@@ -75,6 +75,11 @@ window.CONFIG = {
   STAR_SPAWN_MIN_MS: 18000,
   STAR_SPAWN_MAX_MS: 30000,
   STAR_LIFETIME_MS: 8000,
+
+  LEADERBOARD: {
+    API_BASE: ''
+  },
+
   MODEL_NAMES: {
     en: ['Petal', 'Sunbeam', 'Tide', 'Verdant', 'Prism', 'Starlight'],
     ru: ['Лепесток', 'Солнышко', 'Прилив', 'Вердант', 'Призма', 'Звезда']
@@ -180,7 +185,15 @@ window.CONFIG = {
       achievementShopFirst: 'New supplies',
       achievementShopFirstDesc: 'Make your first shop purchase.',
       achievementLevel15: 'Full constellation',
-      achievementLevel15Desc: 'Reach level 15.'
+      achievementLevel15Desc: 'Reach level 15.',
+      leaderboard: 'LEADERBOARD',
+      leaderboardTitle: 'Top collectors',
+      leaderboardYou: 'You · rank {a}',
+      leaderboardUnranked: 'You · unranked',
+      leaderboardOffline: 'Leaderboard offline',
+      leaderboardEmpty: 'No scores yet. Be the first!',
+      leaderboardRank: '#{a}',
+      leaderboardScore: '{a} pts'
     },
     ru: {
       title: 'Аниме Кликер',
@@ -262,7 +275,15 @@ window.CONFIG = {
       achievementShopFirst: 'Новые припасы',
       achievementShopFirstDesc: 'Сделай первую покупку в магазине.',
       achievementLevel15: 'Полное созвездие',
-      achievementLevel15Desc: 'Достигни 15 уровня.'
+      achievementLevel15Desc: 'Достигни 15 уровня.',
+      leaderboard: 'РЕЙТИНГ',
+      leaderboardTitle: 'Лучшие коллекционеры',
+      leaderboardYou: 'Вы · место {a}',
+      leaderboardUnranked: 'Вы · вне рейтинга',
+      leaderboardOffline: 'Рейтинг недоступен',
+      leaderboardEmpty: 'Пока нет очков. Будь первым!',
+      leaderboardRank: '#{a}',
+      leaderboardScore: '{a} очк.'
     }
   }
 };

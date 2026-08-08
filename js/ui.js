@@ -24,7 +24,9 @@
         'background-prev', 'background-next', 'model-kicker', 'model-label', 'model-hint',
         'model-prev', 'model-next', 'save-status', 'shop-button', 'shop-sheet', 'shop-backdrop',
         'shop-close', 'shop-list', 'shop-title', 'shop-summary', 'achievements-title',
-        'achievement-count', 'achievement-list', 'event-star'
+        'achievement-count', 'achievement-list', 'event-star',
+        'leaderboard-button', 'leaderboard-sheet', 'leaderboard-backdrop', 'leaderboard-close',
+        'leaderboard-title', 'leaderboard-summary', 'leaderboard-list', 'leaderboard-status'
       ];
       for (const id of ids) {
         const node = document.getElementById(id);
@@ -63,8 +65,11 @@
       refs.languageToggle.textContent = translate('language');
       refs.retryButton.textContent = translate('retry');
       refs.shopButton.textContent = translate('shop');
+      refs.leaderboardButton.textContent = translate('leaderboard');
       refs.shopTitle.textContent = translate('shopTitle');
+      refs.leaderboardTitle.textContent = translate('leaderboardTitle');
       refs.shopClose.setAttribute('aria-label', translate('close'));
+      refs.leaderboardClose.setAttribute('aria-label', translate('close'));
       refs.achievementsTitle.textContent = translate('achievements');
       refs.eventStar.setAttribute('aria-label', translate('starEvent'));
       refs.loadingScreen.setAttribute('aria-label', translate('loading'));
@@ -359,6 +364,76 @@
       shopReturnFocus = null;
     }
 
+    let leaderboardReturnFocus = null;
+
+    function renderLeaderboard(entries) {
+      refs.leaderboardList.replaceChildren();
+      const credentials = typeof Leaderboard !== 'undefined' ? Leaderboard.getCredentials() : null;
+      const rank = typeof Leaderboard !== 'undefined' ? Leaderboard.getServerRank() : null;
+      const online = typeof Leaderboard !== 'undefined' ? Leaderboard.isOnline() : false;
+
+      if (!online) {
+        refs.leaderboardStatus.textContent = translate('leaderboardOffline');
+      } else if (rank) {
+        refs.leaderboardStatus.textContent = translate('leaderboardYou', { a: rank });
+      } else {
+        refs.leaderboardStatus.textContent = translate('leaderboardUnranked');
+      }
+
+      if (!entries.length) {
+        const empty = document.createElement('p');
+        empty.className = 'leaderboard-empty';
+        empty.textContent = translate('leaderboardEmpty');
+        refs.leaderboardList.appendChild(empty);
+        return;
+      }
+
+      for (const entry of entries) {
+        const row = document.createElement('div');
+        row.className = 'leaderboard-row';
+        if (credentials?.id === entry.id) row.classList.add('is-you');
+        row.innerHTML = `
+          <span class="leaderboard-rank" data-rank></span>
+          <span class="leaderboard-name" data-name></span>
+          <span class="leaderboard-score" data-score></span>`;
+        row.querySelector('[data-rank]').textContent = translate('leaderboardRank', { a: entry.rank });
+        row.querySelector('[data-name]').textContent = entry.name;
+        row.querySelector('[data-score]').textContent = translate('leaderboardScore', { a: formatNumber(entry.totalEarned) });
+        refs.leaderboardList.appendChild(row);
+      }
+    }
+
+    async function openLeaderboard() {
+      leaderboardReturnFocus = document.activeElement;
+      refs.leaderboardBackdrop.classList.add('is-visible');
+      refs.leaderboardSheet.classList.add('is-visible');
+      refs.leaderboardSheet.setAttribute('aria-hidden', 'false');
+      refs.leaderboardClose.focus();
+      refs.leaderboardStatus.textContent = translate('loading');
+      try {
+        if (typeof Leaderboard !== 'undefined') {
+          await Leaderboard.queueSync(false);
+          const entries = await Leaderboard.fetchLeaderboard(20);
+          renderLeaderboard(entries);
+        } else {
+          renderLeaderboard([]);
+        }
+      } catch (error) {
+        renderLeaderboard([]);
+      }
+    }
+
+    function closeLeaderboard() {
+      refs.leaderboardBackdrop.classList.remove('is-visible');
+      refs.leaderboardSheet.classList.remove('is-visible');
+      refs.leaderboardSheet.setAttribute('aria-hidden', 'true');
+      const focusTarget = leaderboardReturnFocus && document.contains(leaderboardReturnFocus)
+        ? leaderboardReturnFocus
+        : refs.leaderboardButton;
+      focusTarget?.focus();
+      leaderboardReturnFocus = null;
+    }
+
     function getShopFocusableElements() {
       return [refs.shopClose, ...refs.shopList.querySelectorAll('button:not(:disabled)')]
         .filter((node) => node && !node.closest('.is-hidden'));
@@ -404,7 +479,10 @@
       translate,
       openShop,
       closeShop,
+      openLeaderboard,
+      closeLeaderboard,
       isShopOpen: () => refs.shopSheet.classList.contains('is-visible'),
+      isLeaderboardOpen: () => refs.leaderboardSheet.classList.contains('is-visible'),
       getShopFocusableElements,
       setEventActive,
       setEventPosition,
