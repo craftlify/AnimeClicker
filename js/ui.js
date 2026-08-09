@@ -4,7 +4,7 @@
   const UI = (() => {
     const refs = {};
     const preloadedImages = [];
-    let language = 'en';
+    let language = 'ru';
     let appliedBackground = -1;
     let appliedModel = -1;
     let backgroundTimer = 0;
@@ -19,21 +19,22 @@
         'app', 'loading-screen', 'loading-label', 'loading-hint', 'loading-bar', 'game-shell',
         'game-stage', 'gradient-current', 'gradient-next', 'language-toggle', 'app-title',
         'app-subtitle', 'level-label', 'progress-fill', 'progress-copy', 'points-caption',
+        'progress-kicker', 'loading-progress', 'play-area', 'game-controls',
         'points-value', 'cps-value', 'combo-label', 'total-earned', 'click-hint', 'toast', 'model-frame', 'model-image',
         'retry-button', 'upgrade-kicker',
         'power-value', 'per-click', 'upgrade-status', 'upgrade-button', 'upgrade-label',
         'upgrade-cost', 'background-kicker', 'background-label', 'background-hint',
         'background-prev', 'background-next', 'background-recommended', 'model-kicker', 'model-label', 'model-hint',
         'model-prev', 'model-next', 'save-status', 'shop-button', 'shop-sheet', 'shop-backdrop',
-        'shop-close', 'shop-list', 'shop-title', 'shop-summary', 'shop-art', 'achievements-title',
-        'achievement-count', 'achievement-list', 'achievement-art', 'event-star',
+        'shop-close', 'shop-list', 'shop-title', 'shop-kicker', 'shop-summary', 'shop-art', 'achievements-title',
+        'achievement-count', 'achievement-list', 'achievement-art', 'event-star', 'event-star-label',
         'gallery-button', 'customize-kicker', 'customize-label', 'customize-hint',
         'gallery-sheet', 'gallery-backdrop', 'gallery-close', 'gallery-kicker', 'gallery-title',
         'gallery-summary', 'gallery-banner', 'gallery-model-tab', 'gallery-scene-tab',
-        'gallery-model-view', 'gallery-scene-view', 'gallery-models-title', 'gallery-characters-art',
+        'gallery-model-view', 'gallery-scene-view', 'gallery-tabs', 'gallery-models-title', 'gallery-characters-art',
         'gallery-model-list', 'gallery-scenes-title', 'gallery-scenes-art', 'gallery-scene-list',
         'leaderboard-button', 'leaderboard-sheet', 'leaderboard-backdrop', 'leaderboard-close',
-        'leaderboard-title', 'leaderboard-summary', 'leaderboard-list', 'leaderboard-status'
+        'leaderboard-kicker', 'leaderboard-title', 'leaderboard-summary', 'leaderboard-list', 'leaderboard-status'
       ];
       for (const id of ids) {
         const node = document.getElementById(id);
@@ -84,6 +85,9 @@
       refs.appSubtitle.textContent = translate('subtitle');
       refs.loadingLabel.textContent = translate('loading');
       refs.loadingHint.textContent = translate('loadingHint');
+      refs.loadingProgress.setAttribute('aria-label', translate('loadingProgress'));
+      refs.gameShell.setAttribute('aria-label', translate('title'));
+      refs.progressKicker.textContent = translate('progress');
       refs.pointsCaption.textContent = translate('points');
       refs.upgradeKicker.textContent = translate('upgradeKicker');
       refs.customizeKicker.textContent = translate('customize');
@@ -95,13 +99,21 @@
       refs.modelKicker.textContent = translate('modelKicker');
       refs.modelHint.textContent = translate('modelHint');
       refs.clickHint.textContent = translate('clickHint');
+      refs.playArea.setAttribute('aria-label', translate('playArea'));
+      refs.gameControls.setAttribute('aria-label', translate('gameControls'));
       refs.languageToggle.textContent = translate('language');
       refs.languageToggle.setAttribute('aria-label', translate('switchLanguage'));
+      refs.languageToggle.title = translate('switchLanguage');
       refs.retryButton.textContent = translate('retry');
       setButtonLabel(refs.shopButton, 'shop');
       setButtonLabel(refs.leaderboardButton, 'leaderboard');
       refs.shopButton.setAttribute('aria-label', translate('shop'));
+      refs.shopButton.title = translate('shop');
+      refs.shopButton.dataset.tooltip = translate('shop');
       refs.leaderboardButton.setAttribute('aria-label', translate('leaderboard'));
+      refs.leaderboardButton.title = translate('leaderboard');
+      refs.leaderboardButton.dataset.tooltip = translate('leaderboard');
+      refs.shopKicker.textContent = translate('shop');
       refs.shopTitle.textContent = translate('shopTitle');
       refs.shopArt.alt = translate('shopArtAlt');
       refs.achievementArt.alt = translate('achievementsArtAlt');
@@ -117,13 +129,16 @@
       refs.galleryBanner.alt = translate('galleryBannerAlt');
       refs.galleryCharactersArt.alt = translate('galleryCharactersAlt');
       refs.galleryScenesArt.alt = translate('galleryScenesAlt');
+      refs.galleryTabs.setAttribute('aria-label', translate('customizeControls'));
       refs.galleryBackdrop.setAttribute('aria-label', translate('close'));
       refs.galleryClose.setAttribute('aria-label', translate('close'));
+      refs.leaderboardKicker.textContent = translate('leaderboard');
       refs.leaderboardTitle.textContent = translate('leaderboardTitle');
       refs.shopClose.setAttribute('aria-label', translate('close'));
       refs.leaderboardClose.setAttribute('aria-label', translate('close'));
       refs.achievementsTitle.textContent = translate('achievements');
       refs.eventStar.setAttribute('aria-label', translate('starEvent'));
+      refs.eventStarLabel.textContent = translate('starEvent');
       refs.loadingScreen.setAttribute('aria-label', translate('loading'));
     }
 
@@ -135,13 +150,14 @@
         const name = (CONFIG.MODEL_NAMES[language] || CONFIG.MODEL_NAMES.en)[appliedModel];
         refs.modelImage.alt = translate('modelAlt', { a: name });
       }
+      return language;
     }
 
     function setLoading(progress) {
       const normalized = Math.max(0, Math.min(1, Number(progress) || 0));
       const percent = Math.round(normalized * 100);
       refs.loadingBar.style.width = `${percent}%`;
-      refs.loadingScreen.querySelector('.loading-progress').setAttribute('aria-valuenow', String(percent));
+      refs.loadingProgress.setAttribute('aria-valuenow', String(percent));
     }
 
     async function preloadModels(onProgress) {

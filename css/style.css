@@ -2417,3 +2417,396 @@ button:focus-visible,
     display: none;
   }
 }
+
+/* First-screen hierarchy: compact controls, maximum space for the character. */
+.sr-only,
+.icon-button-label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.stage-content {
+  padding: 26px 28px calc(18px + env(safe-area-inset-bottom));
+}
+
+.topbar {
+  padding: 10px 12px 9px;
+  border-radius: 17px;
+}
+
+.hero-copy {
+  margin-top: 12px;
+}
+
+.hero-copy h1 {
+  font-size: 30px;
+}
+
+.hero-copy p {
+  margin-top: 5px;
+  font-size: 10.5px;
+}
+
+.score-row {
+  gap: 14px;
+  margin-top: 13px;
+}
+
+.progress-track {
+  height: 7px;
+  margin-top: 6px;
+}
+
+.progress-copy {
+  margin-top: 4px;
+  font-size: 9.5px;
+}
+
+.points-block {
+  min-width: 100px;
+}
+
+.points-value {
+  font-size: 27px;
+}
+
+.total-earned {
+  margin-top: 3px;
+  font-size: 9.5px;
+}
+
+.cps-value {
+  margin-top: 2px;
+  font-size: 9px;
+}
+
+.model-frame {
+  top: -11px;
+  width: min(100%, 430px);
+  height: min(100%, 690px);
+}
+
+.model-shadow {
+  bottom: 9%;
+}
+
+.click-hint {
+  top: 1px;
+  padding: 4px 8px;
+  font-size: 10px;
+}
+
+.upgrade-panel {
+  min-height: 61px;
+  padding: 8px 10px 8px 12px;
+  gap: 12px;
+  border-radius: 15px;
+}
+
+.control-heading {
+  gap: 7px;
+}
+
+.control-icon {
+  width: 23px;
+  height: 23px;
+  border-radius: 8px;
+}
+
+.control-icon .ui-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.control-title {
+  margin-top: 3px;
+  font-size: 14px;
+}
+
+.upgrade-panel .control-subtitle {
+  display: none;
+}
+
+.primary-button {
+  min-width: 142px;
+  min-height: 47px;
+  padding: 7px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+}
+
+.primary-button span:last-child {
+  margin-top: 2px;
+  font-size: 8px;
+}
+
+.customize-trigger {
+  min-height: 53px;
+  margin-top: 7px;
+  padding: 7px 10px;
+  gap: 9px;
+  border-radius: 15px;
+}
+
+.customize-trigger-icon {
+  width: 33px;
+  height: 33px;
+  border-radius: 11px;
+}
+
+.customize-trigger-icon .ui-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.customize-trigger-copy {
+  gap: 2px;
+}
+
+.customize-trigger-copy .eyebrow {
+  font-size: 8px;
+}
+
+.customize-trigger-copy strong {
+  font-size: 12px;
+}
+
+.customize-trigger-hint {
+  font-size: 8px;
+}
+
+.customize-trigger-chevron {
+  font-size: 22px;
+}
+
+.utility-dock {
+  min-height: 42px;
+  margin-top: 7px;
+  justify-content: flex-end;
+}
+
+.footer-brand,
+.save-status {
+  display: block;
+}
+
+.footer-brand {
+  display: none;
+}
+
+.footer-actions {
+  gap: 6px;
+  margin-left: auto;
+}
+
+.footer-action {
+  position: relative;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  min-height: 42px;
+  padding: 0;
+  border-radius: 13px;
+  place-items: center;
+  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.footer-action .ui-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.shop-button.footer-action,
+.leaderboard-button.footer-action {
+  background: color-mix(in srgb, var(--panel-strong) 88%, transparent);
+  box-shadow: 0 7px 16px var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.shop-button.footer-action {
+  border-color: color-mix(in srgb, var(--accent) 70%, var(--line));
+}
+
+.leaderboard-button.footer-action {
+  border-color: var(--line-strong);
+}
+
+.footer-action::after {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 7px);
+  padding: 6px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--panel-strong);
+  color: var(--ink);
+  content: attr(data-tooltip);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 160ms ease, transform 160ms ease;
+  white-space: nowrap;
+}
+
+.footer-action:hover::after,
+.footer-action:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.save-status {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+@supports not (color: color-mix(in srgb, black, white)) {
+  .shop-button.footer-action,
+  .leaderboard-button.footer-action {
+    background: var(--panel-strong);
+  }
+
+  .shop-button.footer-action {
+    border-color: var(--accent);
+  }
+}
+
+@media (max-width: 390px) {
+  .stage-content {
+    padding: 20px 20px calc(14px + env(safe-area-inset-bottom));
+  }
+
+  .topbar {
+    padding: 9px 10px 8px;
+  }
+
+  .hero-copy {
+    margin-top: 10px;
+  }
+
+  .hero-copy h1 {
+    font-size: 28px;
+  }
+
+  .score-row {
+    gap: 11px;
+    margin-top: 11px;
+  }
+
+  .points-block {
+    min-width: 91px;
+  }
+
+  .points-value {
+    font-size: 24px;
+  }
+
+  .model-frame {
+    top: -8px;
+    width: min(100%, 420px);
+    height: min(100%, 675px);
+  }
+
+  .upgrade-panel {
+    min-height: 58px;
+    padding: 7px 9px 7px 10px;
+    gap: 8px;
+  }
+
+  .primary-button {
+    min-width: 132px;
+    min-height: 45px;
+    padding-inline: 8px;
+    font-size: 9px;
+  }
+
+  .customize-trigger {
+    min-height: 50px;
+    margin-top: 6px;
+    padding-block: 6px;
+  }
+
+  .customize-trigger-icon {
+    width: 31px;
+    height: 31px;
+  }
+
+  .customize-trigger-copy strong {
+    font-size: 11px;
+  }
+
+  .utility-dock {
+    min-height: 40px;
+    margin-top: 6px;
+  }
+
+  .footer-action {
+    width: 40px;
+    height: 40px;
+    min-height: 40px;
+  }
+}
+
+@media (max-width: 340px) {
+  .stage-content {
+    padding-inline: 16px;
+  }
+
+  .hero-copy h1 {
+    font-size: 25px;
+  }
+
+  .hero-copy p {
+    font-size: 9px;
+  }
+
+  .model-frame {
+    width: min(100%, 410px);
+    height: min(100%, 660px);
+  }
+
+  .control-icon {
+    display: grid;
+    width: 20px;
+    height: 20px;
+  }
+
+  .control-icon .ui-icon {
+    width: 11px;
+    height: 11px;
+  }
+
+  .primary-button {
+    min-width: 122px;
+    padding-inline: 6px;
+  }
+
+  .customize-trigger-icon {
+    width: 29px;
+    height: 29px;
+  }
+
+  .customize-trigger-icon .ui-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-action::after {
+    transition: none;
+  }
+}

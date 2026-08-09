@@ -2,6 +2,8 @@
   'use strict';
 
   const STORAGE_KEY = 'anime-clicker-save-v1';
+  const LANGUAGE_KEY = 'anime-clicker-language-v1';
+  const DEFAULT_LANGUAGE = 'ru';
   const LOCAL_FIELDS = [
     'totalEarned', 'points', 'clickLevel', 'modelIdx', 'bgIdx',
     'autoClickers', 'focusLevel', 'lensLevel', 'manualClicks', 'eventClicks',
@@ -11,13 +13,23 @@
   let player = null;
   let initPromise = null;
 
-  function detectBrowserLanguage() {
-    const candidates = [];
-    if (typeof navigator !== 'undefined') {
-      if (Array.isArray(navigator.languages)) candidates.push(...navigator.languages);
-      if (navigator.language) candidates.push(navigator.language);
+  function readLanguagePreference() {
+    try {
+      const value = window.localStorage.getItem(LANGUAGE_KEY);
+      return value === 'ru' || value === 'en' ? value : null;
+    } catch (error) {
+      return null;
     }
-    return candidates.some((value) => String(value).toLowerCase().startsWith('ru')) ? 'ru' : 'en';
+  }
+
+  function writeLanguagePreference(value) {
+    const language = value === 'ru' ? 'ru' : 'en';
+    try {
+      window.localStorage.setItem(LANGUAGE_KEY, language);
+    } catch (error) {
+      console.warn('[SDK] language preference unavailable', error);
+    }
+    return language;
   }
 
   function getLocalState() {
@@ -61,16 +73,26 @@
 
   const SDK = {
     mode: 'offline',
-    lang: 'en',
+    lang: DEFAULT_LANGUAGE,
     LOCAL_FIELDS,
+    LANGUAGE_KEY,
+
+    getLanguagePreference() {
+      return readLanguagePreference();
+    },
+
+    setLanguagePreference(value) {
+      return writeLanguagePreference(value);
+    },
 
     async init() {
       if (initPromise) return initPromise;
 
       initPromise = (async () => {
+        const preferredLanguage = readLanguagePreference();
         const hasYandexSdk = typeof window.YaGames !== 'undefined' && typeof window.YaGames.init === 'function';
         if (!hasYandexSdk) {
-          this.lang = detectBrowserLanguage();
+          this.lang = preferredLanguage || DEFAULT_LANGUAGE;
           return this;
         }
 
@@ -80,8 +102,8 @@
 
           this.mode = 'yandex';
           const environment = ysdk.environment || {};
-          const language = environment.i18?.lang || environment.i18n?.lang || environment.lang || 'en';
-          this.lang = String(language).toLowerCase().startsWith('ru') ? 'ru' : 'en';
+          const language = environment.i18?.lang || environment.i18n?.lang || environment.lang || DEFAULT_LANGUAGE;
+          this.lang = preferredLanguage || (String(language).toLowerCase().startsWith('ru') ? 'ru' : DEFAULT_LANGUAGE);
 
           try {
             player = await withTimeout(ysdk.getPlayer({ scopes: false }), 1800);
@@ -90,7 +112,7 @@
           }
         } catch (error) {
           this.mode = 'offline';
-          this.lang = detectBrowserLanguage();
+          this.lang = preferredLanguage || DEFAULT_LANGUAGE;
           console.info('[SDK] running with local fallback', error);
         }
 

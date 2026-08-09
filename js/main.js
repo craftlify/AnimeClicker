@@ -604,7 +604,8 @@
     document.getElementById('model-prev').addEventListener('click', () => cycleModel(-1));
     document.getElementById('model-next').addEventListener('click', () => cycleModel(1));
     document.getElementById('language-toggle').addEventListener('click', () => {
-      UI.toggleLanguage();
+      const language = UI.toggleLanguage();
+      SDK.setLanguagePreference?.(language);
       UI.render(state, detailsFor());
     });
     document.getElementById('retry-button').addEventListener('click', boot);

@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
     <meta name="theme-color" content="#11102e">
-    <meta name="description" content="Anime Clicker: a cozy portrait clicker for Yandex Games.">
+    <meta name="description" content="Anime Clicker: уютный портретный кликер для Яндекс Игр.">
     <link rel="icon" type="image/png" href="assets/icon.png">
     <title>Anime Clicker</title>
     <link rel="stylesheet" href="css/style.css">
@@ -24,15 +24,15 @@
           <span class="loading-star loading-star-one">✦</span>
           <span class="loading-star loading-star-two">✧</span>
         </div>
-        <p id="loading-label" class="loading-label">Preparing your story…</p>
-        <p id="loading-hint" class="loading-hint">Loading illustrations</p>
-        <div class="loading-progress" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <p id="loading-label" class="loading-label">Готовим твою историю…</p>
+        <p id="loading-hint" class="loading-hint">Загружаем иллюстрации</p>
+        <div id="loading-progress" class="loading-progress" role="progressbar" aria-label="Загрузка" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
           <span id="loading-bar"></span>
         </div>
-        <button id="retry-button" class="retry-button is-hidden" type="button">Try again</button>
+        <button id="retry-button" class="retry-button is-hidden" type="button">Повторить</button>
       </section>
 
-      <main id="game-shell" class="game-shell is-hidden" aria-label="Anime Clicker">
+      <main id="game-shell" class="game-shell is-hidden" aria-label="Аниме Кликер">
         <div id="stage-viewport" class="stage-viewport">
           <div id="game-stage" class="game-stage" data-tone="light">
             <div id="gradient-current" class="gradient-layer gradient-current"></div>
@@ -48,7 +48,7 @@
                     <span class="brand-mark" aria-hidden="true">✦</span>
                     <span class="brand-name">ANIME CLICKER</span>
                   </div>
-                  <button id="language-toggle" class="language-toggle" type="button" aria-label="Switch language">RU</button>
+                  <button id="language-toggle" class="language-toggle" type="button" aria-label="Переключить язык">EN</button>
                 </div>
 
                 <div class="hero-copy">
@@ -59,33 +59,33 @@
                 <div class="score-row">
                   <div class="level-block">
                     <div class="level-line">
-                      <span class="eyebrow">PROGRESS</span>
-                      <span id="level-label" class="level-label">LEVEL 1 / 15</span>
+                      <span id="progress-kicker" class="eyebrow">ПРОГРЕСС</span>
+                      <span id="level-label" class="level-label">УРОВЕНЬ 1 / 15</span>
                     </div>
                     <div class="progress-track" aria-hidden="true">
                       <span id="progress-fill" class="progress-fill"></span>
                       <span class="progress-spark"></span>
                     </div>
-                    <p id="progress-copy" class="progress-copy">100 pts to next level</p>
+                    <p id="progress-copy" class="progress-copy">100 очк. до нового уровня</p>
                     <span id="combo-label" class="combo-label" aria-live="polite"></span>
                   </div>
 
                   <div class="points-block">
-                    <span id="points-caption" class="eyebrow">POINTS</span>
+                    <span id="points-caption" class="eyebrow">ОЧКИ</span>
                     <strong id="points-value" class="points-value">0</strong>
-                    <span id="total-earned" class="total-earned">0 total earned</span>
-                    <span id="cps-value" class="cps-value">+0 CPS</span>
+                    <span id="total-earned" class="total-earned">0 всего заработано</span>
+                    <span id="cps-value" class="cps-value">+0 в сек.</span>
                   </div>
                 </div>
               </header>
 
-              <section class="play-area" aria-label="Character click area">
+              <section id="play-area" class="play-area" aria-label="Область клика по персонажу">
                 <div class="play-orbit play-orbit-large" aria-hidden="true"></div>
                 <div class="play-orbit play-orbit-small" aria-hidden="true"></div>
                 <div class="model-shadow" aria-hidden="true"></div>
                 <p id="click-hint" class="click-hint">TAP TO COLLECT</p>
                 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-                <button id="event-star" class="event-star" type="button" aria-hidden="true" aria-label="Collect Starlight" tabindex="-1">✦<span>STARLIGHT</span></button>
+                <button id="event-star" class="event-star" type="button" aria-hidden="true" aria-label="Собрать звёздный свет" tabindex="-1">✦<span id="event-star-label">ЗВЁЗДНЫЙ СВЕТ</span></button>
                 <div id="model-frame" class="model-frame">
                   <img id="model-image" class="model-image" src="assets/models/girl1.png" alt="Petal, click character" draggable="false" tabindex="0">
                 </div>
@@ -93,22 +93,22 @@
                 <span class="tap-ring tap-ring-two" aria-hidden="true"></span>
               </section>
 
-              <section class="controls" aria-label="Game controls">
+              <section id="game-controls" class="controls" aria-label="Игровые действия">
                 <div class="upgrade-panel control-panel">
                   <div class="control-copy">
                     <div class="control-heading">
                       <span class="control-icon" aria-hidden="true">
                         <svg class="ui-icon" viewBox="0 0 24 24" focusable="false"><path d="m12 2 1.7 6.3L20 10l-6.3 1.7L12 18l-1.7-6.3L4 10l6.3-1.7L12 2Z"/><path d="m19 15 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15Z"/></svg>
                       </span>
-                      <span id="upgrade-kicker" class="eyebrow">CLICK POWER</span>
+                      <span id="upgrade-kicker" class="eyebrow">СИЛА КЛИКА</span>
                       <span id="power-value" class="power-value">×1</span>
                     </div>
-                    <p id="per-click" class="control-title">+1 per click</p>
-                    <p id="upgrade-status" class="control-subtitle">50 POINTS</p>
+                    <p id="per-click" class="control-title">+1 за клик</p>
+                    <p id="upgrade-status" class="control-subtitle">50 ОЧКОВ</p>
                   </div>
                   <button id="upgrade-button" class="primary-button" type="button">
-                    <span id="upgrade-label">POWER 1 → 2</span>
-                    <span id="upgrade-cost">50 POINTS</span>
+                    <span id="upgrade-label">УЛУЧШИТЬ · 1 → 2</span>
+                    <span id="upgrade-cost">50 ОЧКОВ</span>
                   </button>
                 </div>
 
@@ -117,9 +117,9 @@
                     <svg class="ui-icon" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.1 2.4 3.2 5.2 3.2 8.5S14.1 18.1 12 20.5M12 3.5c-2.1 2.4-3.2 5.2-3.2 8.5S9.9 18.1 12 20.5"/><path d="m17.5 3.8.7 2.1 2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7.7-2.1Z"/></svg>
                   </span>
                   <span class="customize-trigger-copy">
-                    <span id="customize-kicker" class="eyebrow">LOOK</span>
+                    <span id="customize-kicker" class="eyebrow">ОБРАЗ</span>
                     <strong id="customize-label">Sunbeam · Solar peach</strong>
-                    <span id="customize-hint" class="customize-trigger-hint">Character + scenery</span>
+                    <span id="customize-hint" class="customize-trigger-hint">Персонаж + сцена</span>
                   </span>
                   <span class="customize-trigger-chevron" aria-hidden="true">›</span>
                 </button>
@@ -149,16 +149,16 @@
                   </div>
                 </div>
 
-                <div class="footer-row">
+                <div class="footer-row utility-dock" aria-label="Дополнительные разделы">
                   <span class="footer-brand"><span aria-hidden="true">✦</span> STORY MODE</span>
                   <div class="footer-actions">
-                    <button id="leaderboard-button" class="leaderboard-button footer-action" type="button" aria-label="LEADERBOARD">
-                      <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19.5V12h4v7.5M10 19.5V5h4v14.5M16 19.5V8h4v11.5"/><path d="M3 21h18"/></svg><span data-button-label>LEADERBOARD</span>
+                    <button id="leaderboard-button" class="leaderboard-button footer-action" type="button" aria-label="Рейтинг" title="Рейтинг" data-tooltip="Рейтинг">
+                      <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19.5V12h4v7.5M10 19.5V5h4v14.5M16 19.5V8h4v11.5"/><path d="M3 21h18"/></svg><span class="icon-button-label" data-button-label aria-hidden="true">РЕЙТИНГ</span>
                     </button>
-                    <button id="shop-button" class="shop-button footer-action" type="button" aria-label="SHOP">
-                      <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5.5 8.5h13l1 11h-15l1-11Z"/><path d="M8.5 8.5V6.8a3.5 3.5 0 0 1 7 0v1.7"/><path d="m18.2 3.2.6 1.8 1.8.6-1.8.6-.6 1.8-.6-1.8-1.8-.6 1.8-.6.6-1.8Z"/></svg><span data-button-label>SHOP</span>
+                    <button id="shop-button" class="shop-button footer-action" type="button" aria-label="Магазин" title="Магазин" data-tooltip="Магазин">
+                      <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5.5 8.5h13l1 11h-15l1-11Z"/><path d="M8.5 8.5V6.8a3.5 3.5 0 0 1 7 0v1.7"/><path d="m18.2 3.2.6 1.8 1.8.6-1.8.6-.6 1.8-.6-1.8-1.8-.6 1.8-.6.6-1.8Z"/></svg><span class="icon-button-label" data-button-label aria-hidden="true">МАГАЗИН</span>
                     </button>
-                    <span id="save-status" class="save-status">Playing offline</span>
+                    <span id="save-status" class="save-status" aria-live="polite">Играем офлайн</span>
                   </div>
                 </div>
               </section>
@@ -166,38 +166,38 @@
             </div>
           </div>
           <div class="overlay-layer">
-            <button id="shop-backdrop" class="shop-backdrop" type="button" aria-label="Close shop"></button>
+            <button id="shop-backdrop" class="shop-backdrop" type="button" aria-label="Закрыть магазин"></button>
             <section id="shop-sheet" class="shop-sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="shop-title" tabindex="-1">
               <div class="shop-sheet-header">
                 <div>
-                  <span class="eyebrow">SHOP</span>
-                  <h2 id="shop-title">Starlight Shop</h2>
-                  <p id="shop-summary">0 / 10 achievements unlocked</p>
+                  <span id="shop-kicker" class="eyebrow">МАГАЗИН</span>
+                  <h2 id="shop-title">Магазин звёздного света</h2>
+                  <p id="shop-summary">0 / 10 достижений открыто</p>
                 </div>
                 <img id="shop-art" class="shop-art" src="assets/illustrations/premium-shop-banner.png" alt="Premium cosmic fashion collection" draggable="false">
                 <button id="shop-close" class="shop-close" type="button" aria-label="Close">×</button>
               </div>
               <div id="shop-list" class="shop-list"></div>
               <div class="achievement-heading">
-                <span id="achievements-title" class="eyebrow">ACHIEVEMENTS</span>
+                <span id="achievements-title" class="eyebrow">ДОСТИЖЕНИЯ</span>
                 <span id="achievement-count" aria-hidden="true"></span>
               </div>
               <img id="achievement-art" class="achievement-art" src="assets/illustrations/achievement-constellation.png" alt="Constellation of unlocked achievements" draggable="false">
               <div id="achievement-list" class="achievement-list"></div>
             </section>
 
-            <button id="gallery-backdrop" class="gallery-backdrop" type="button" aria-label="Close collection"></button>
+            <button id="gallery-backdrop" class="gallery-backdrop" type="button" aria-label="Закрыть галерею"></button>
             <section id="gallery-sheet" class="gallery-sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="gallery-title" tabindex="-1">
               <div class="gallery-sheet-header">
                 <div>
-                  <span id="gallery-kicker" class="eyebrow">LOOK</span>
-                  <h2 id="gallery-title">Choose your look</h2>
-                  <p id="gallery-summary">1 / 18 models · 1 / 18 scenes unlocked</p>
+                  <span id="gallery-kicker" class="eyebrow">ОБРАЗ</span>
+                  <h2 id="gallery-title">Выбери свой образ</h2>
+                  <p id="gallery-summary">1 / 18 персонажей · 1 / 18 сцен открыто</p>
                 </div>
                 <button id="gallery-close" class="gallery-close" type="button" aria-label="Close">×</button>
               </div>
               <img id="gallery-banner" class="gallery-banner" src="assets/illustrations/customize-banner.png" alt="Celestial style picker" draggable="false">
-              <div class="gallery-tabs" role="tablist" aria-label="Choose character or scenery">
+              <div id="gallery-tabs" class="gallery-tabs" role="tablist" aria-label="Выбрать персонажа или сцену">
                 <button id="gallery-model-tab" class="gallery-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="gallery-model-view">
                   <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="3"/><path d="M5.5 20c.8-3.1 2.9-4.7 6.5-4.7s5.7 1.6 6.5 4.7"/></svg><span data-tab-label>CHARACTER</span>
                 </button>
@@ -223,13 +223,13 @@
               </div>
             </section>
 
-            <button id="leaderboard-backdrop" class="leaderboard-backdrop" type="button" aria-label="Close leaderboard"></button>
+            <button id="leaderboard-backdrop" class="leaderboard-backdrop" type="button" aria-label="Закрыть рейтинг"></button>
             <section id="leaderboard-sheet" class="leaderboard-sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="leaderboard-title" tabindex="-1">
               <div class="leaderboard-sheet-header">
                 <div>
-                  <span class="eyebrow">LEADERBOARD</span>
-                  <h2 id="leaderboard-title">Top collectors</h2>
-                  <p id="leaderboard-status" class="leaderboard-summary">You · unranked</p>
+                  <span id="leaderboard-kicker" class="eyebrow">РЕЙТИНГ</span>
+                  <h2 id="leaderboard-title">Лучшие коллекционеры</h2>
+                  <p id="leaderboard-status" class="leaderboard-summary">Вы · вне рейтинга</p>
                 </div>
                 <button id="leaderboard-close" class="leaderboard-close" type="button" aria-label="Close">×</button>
               </div>
